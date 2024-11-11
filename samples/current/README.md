@@ -1835,7 +1835,7 @@ allow if true;
 
 revocation ids:
 - `470e4bf7aa2a01ab39c98150bd06aa15b4aa5d86509044a8809a8634cd8cf2b42269a51a774b65d10bac9369d013070b00187925196a8e680108473f11cf8f03`
-- `342167bc54bc642b6718a276875e55b6d39e9b21e4ce13b926a3d398b6c057fc436385bf4c817a16f9ecdf0b0d950e8b8258a20aeb3fd8896c5e9c1f0a53da03`
+- `8556bc91ed8bd1e4c0b6b37bead75d91d332c4144d72e7db715e6300732dc691dbd1f444f1a7a07be8bac60358bf14330b5b8963685490cfb648df879efc9e0a`
 
 authorizer world:
 ```
@@ -2097,9 +2097,9 @@ allow if true;
 
 revocation ids:
 - `3771cefe71beb21ead35a59c8116ee82627a5717c0295f35980662abccb159fe1b37848cb1818e548656bd4fd882d0094a2daab631c76b2b72e3a093914bfe04`
-- `6528db2c9a561ada9086268549a600a8a52ff434ea8183812623eec0e9b6c5d3c41ab7868808623021d92294d583afdf92f4354bcdaa1bc50453e1b89afd630d`
-- `5d5679fe69bfe74b7919323515e9ecba9d01422b16be9341b57f88e695b2bb0bd7966b781001d2b9e00ee618fdc239c96e17e32cb379f13f12d6bd7b1b47ad04`
-- `c37bf24c063f0310eccab8864e48dbeffcdd7240b4f8d1e01eba4fc703e6c9082b845bb55543b10f008dc7f4e78540411912ac1f36fa2aa90011dca40f323b09`
+- `87ce330211e0bca95aebcbbe349c954473f49e6593b6fee34f2be93122d4f930f0fc2dedfc1721b9d2e5346befb97aef75c28a13cc2647bb99e499ceb565470d`
+- `f3dc02647a3c011e87dda6050fbd67c2e037454f186eb4ba0c029c0da7b0eb309c7d24ad5f073571b11876ef9bb7955ecb462c00457a258c4e1ba4eafbae420c`
+- `88c9eea7c2e17409ce542a0e8fe78c53627fc2346ffde3d8d280eb86250c6c84efa5d84ea1f644a7bcfdfc68e2efc07350132c7fc80061014fa9d678c201b20a`
 - `3f675d6c364e06405d4868c904e40f3d81c32b083d91586db814d4cb4bf536b4ba209d82f11b4cb6da293b60b20d6122fc3e0e08e80c381dee83edd848211900`
 
 authorizer world:
@@ -2657,42 +2657,45 @@ result: `Err(FailedLogic(Unauthorized { policy: Allow(0), checks: [Block(FailedB
 ### token
 
 authority:
-symbols: ["fact", "value", "fact2"]
+symbols: ["abcD12", "abcD12x"]
 
 public keys: []
 
 ```
-check if fact(1, $value), 1 == $value;
-check if fact2(1, $value), 1 != $value;
+check if true == true;
+check if false != false;
+check if 1 != true;
+check if 1 == 1;
+check if 1 != 3;
+check if 1 != true;
+check if "abcD12" == "abcD12";
+check if "abcD12x" != "abcD12";
+check if "abcD12x" != true;
+check if 2022-12-04T09:46:41Z == 2022-12-04T09:46:41Z;
+check if 2022-12-04T09:46:41Z != 2020-12-04T09:46:41Z;
+check if 2022-12-04T09:46:41Z != true;
+check if hex:12abcd == hex:12abcd;
+check if hex:12abcd != hex:12ab;
+check if hex:12abcd != true;
+check if {1, 2} == {1, 2};
+check if {1, 4} != {1, 2};
+check if {1, 4} != true;
 ```
 
-### validation for "authorized same type"
+### validation
 
 authorizer code:
 ```
-fact(1, 1);
-fact2(1, 2);
-
 allow if true;
 ```
 
 revocation ids:
-- `d65b3aeceb6268124190f5eb87788a5eb81c89a3fc8370c9a3ea362731c55660b2b390ca6270e68afab90862bd2bbb808aa6b5576c975ae773a992a2434c930d`
+- `4af245a2504ec00809bd0cd8d20ceaaac35f8ec5aaa8c7d3fd6652b126d2bf246d64fec8f0e65c409b196d4a60c9723dd4fbb3328988790e97fc4e08e9528208`
 
 authorizer world:
 ```
 World {
-  facts: [
-    Facts {
-        origin: {
-            None,
-        },
-        facts: [
-            "fact(1, 1)",
-            "fact2(1, 2)",
-        ],
-    },
-]
+  facts: []
   rules: []
   checks: [
     Checks {
@@ -2700,8 +2703,24 @@ World {
             0,
         ),
         checks: [
-            "check if fact(1, $value), 1 == $value",
-            "check if fact2(1, $value), 1 != $value",
+            "check if \"abcD12\" == \"abcD12\"",
+            "check if \"abcD12x\" != \"abcD12\"",
+            "check if \"abcD12x\" != true",
+            "check if 1 != 3",
+            "check if 1 != true",
+            "check if 1 != true",
+            "check if 1 == 1",
+            "check if 2022-12-04T09:46:41Z != 2020-12-04T09:46:41Z",
+            "check if 2022-12-04T09:46:41Z != true",
+            "check if 2022-12-04T09:46:41Z == 2022-12-04T09:46:41Z",
+            "check if false != false",
+            "check if hex:12abcd != hex:12ab",
+            "check if hex:12abcd != true",
+            "check if hex:12abcd == hex:12abcd",
+            "check if true == true",
+            "check if {1, 2} == {1, 2}",
+            "check if {1, 4} != true",
+            "check if {1, 4} != {1, 2}",
         ],
     },
 ]
@@ -2711,53 +2730,7 @@ World {
 }
 ```
 
-result: `Ok(0)`
-### validation for "unauthorized failed logic different type"
-
-authorizer code:
-```
-fact(1, true);
-fact2(1, false);
-
-allow if true;
-```
-
-revocation ids:
-- `d65b3aeceb6268124190f5eb87788a5eb81c89a3fc8370c9a3ea362731c55660b2b390ca6270e68afab90862bd2bbb808aa6b5576c975ae773a992a2434c930d`
-
-authorizer world:
-```
-World {
-  facts: [
-    Facts {
-        origin: {
-            None,
-        },
-        facts: [
-            "fact(1, true)",
-            "fact2(1, false)",
-        ],
-    },
-]
-  rules: []
-  checks: [
-    Checks {
-        origin: Some(
-            0,
-        ),
-        checks: [
-            "check if fact(1, $value), 1 == $value",
-            "check if fact2(1, $value), 1 != $value",
-        ],
-    },
-]
-  policies: [
-    "allow if true",
-]
-}
-```
-
-result: `Err(FailedLogic(Unauthorized { policy: Allow(0), checks: [Block(FailedBlockCheck { block_id: 0, check_id: 0, rule: "check if fact(1, $value), 1 == $value" })] }))`
+result: `Err(FailedLogic(Unauthorized { policy: Allow(0), checks: [Block(FailedBlockCheck { block_id: 0, check_id: 1, rule: "check if false != false" })] }))`
 
 
 ------------------------------
