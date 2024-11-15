@@ -148,9 +148,11 @@ message OpUnary {
     Parens = 1;
     Length = 2;
     TypeOf = 3;
+    Ffi = 4;
   }
 
   required Kind kind = 1;
+  optional string ffiName = 2;
 }
 
 message OpBinary {
@@ -183,9 +185,11 @@ message OpBinary {
     All = 25;
     Any = 26;
     Get = 27;
+    Ffi = 28;
   }
 
   required Kind kind = 1;
+  optional string ffiName = 2;
 }
 
 message OpClosure {

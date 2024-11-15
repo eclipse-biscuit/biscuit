@@ -214,7 +214,7 @@ The logic language is described by the following EBNF grammar:
 <expression_element> ::= <expression_unary> | (<expression_term> <expression_method>? )
 <expression_unary> ::= "!" <sp>? <expression>
 <expression_method> ::= "." <method_name> "(" <sp>? (<term> ( <sp>? "," <sp>? <term>)* )? <sp>? ")"
-<method_name> ::= ([a-z] | [A-Z] ) ([a-z] | [A-Z] | [0-9] | "_" )*
+<method_name> ::= (extern::)?([a-z] | [A-Z] ) ([a-z] | [A-Z] | [0-9] | "_" )*
 
 <expression_term> ::= <term> | ("(" <sp>? <expression> <sp>? ")")
 <operator> ::= "<" | ">" | "<=" | ">=" | "===" | "!==" | "&&" | "||" | "+" | "-" | "*" | "/" | "&" | "|" | "^" | "==" | "!=="
@@ -479,6 +479,7 @@ Here are the currently defined unary operations:
   - `bool`
   - `set`
   - `null`
+- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language
 
 Here are the currently defined binary operations:
 
@@ -510,6 +511,10 @@ Here are the currently defined binary operations:
 - _all_, defined on sets, takes a closure term -> boolean, returns a boolean (v6 only)
 - _short circuiting and_, defined on booleans, takes a closure () -> boolean, returns a boolean (v6 only)
 - _short circuiting or_, defined on booleans, takes a closure () -> boolean, returns a boolean (v6 only)
+- _get_, defined on arrays and maps (v6 only)  
+  on arrays, takes an integer and returns the corresponding element (or `null`, if out of bounds)  
+  on maps, takes either an integer or a string and returns the corresponding element (or `null`, if out of bounds)
+- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language
 
 Integer operations must have overflow checks. If it overflows, the expression
 fails.
@@ -517,6 +522,8 @@ fails.
 Strict equality fails with a type error when trying to compare different types.
 
 Lenient equality returns false when trying to compare different types.
+
+External calls are implementation defined. External calls carry a function name, which can be used to call a user-defined function provided to the biscuit library.
 
 #### Example
 
