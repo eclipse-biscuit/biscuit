@@ -800,7 +800,7 @@ To sign the block at index `n`, we would have:
 - `data_n`: the serialized Datalog
 - `pk_n+1`: the next public key
 - `alg_n+1`: the little endian representation of the signature algorithm for `pk_n+1`
-- `external_sig_n`: te optional external signature of the block
+- `external_sig_n`: the optional external signature of the block
 
 if `external_sig_n` is present, the signed payload format, thereafter referred as "block signature payload v0", would be the concatenation of:
 - `data_n`
