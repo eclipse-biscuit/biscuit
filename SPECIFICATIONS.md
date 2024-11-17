@@ -796,7 +796,7 @@ the `SignedBlock` message. If the field is absent, it defaults to version 0.
 
 ##### Version 0 (deprecated)
 
-To sign the block at index `n`, we would have:
+To sign the block at index `n`, we have:
 - `data_n`: the serialized Datalog
 - `pk_n+1`: the next public key
 - `alg_n+1`: the little endian representation of the signature algorithm for `pk_n+1`
@@ -815,7 +815,7 @@ otherwise, we would have:
 
 This format is deprecated and will be replaced by version 1 in the future.
 
-the signed payload format for external signatures,  thereafter referred as "external signature payload v0", would be the concatenation of:
+the signed payload format for external signatures, thereafter referred as "external signature payload v0", would be the concatenation of:
 - `data_n`
 - `pk_n+1`
 - `alg_n+1`
@@ -824,7 +824,36 @@ This format is not supported anymore and should be replaced by version 1.
 
 ##### Version 1
 
-TODO
+To sign the block at index `n`, we need:
+- `data_n`: the serialized Datalog
+- `pk_n+1`: the next public key
+- `alg_n+1`: the little endian representation of the signature algorithm for `pk_n+1`
+- `sig_n-1`: the signature of the previous block (absent when signing the authority block)
+- `external_sig_n`: the optional external signature of the block
+
+The signed payload format, thereafter referred as "block signature payload v1", would be the concatenation of:
+- the binary representation of the ASCII string "\0VERSION\0"
+- the little endian representation of the version of the signature payload format
+- the binary representation of the ASCII string "\0PAYLOAD\0"
+- `data_n`
+- if `external_sig_n` is present:
+  - the binary representation of the ASCII string "\0EXTERNAL\0"
+  - `external_sig_n`
+- if `sig_n-1` is present:
+  - the binary representation of the ASCII string "\0PREVSIG\0"
+  - `sig_n-1`
+- the binary representation of the ASCII string "\0ALGORITHM\0"
+- `alg_n+1`
+- the binary representation of the ASCII string "\0NEXTKEY\0"
+- `pk_n+1`
+
+the signed payload format for external signatures, thereafter referred as "external signature payload v1", would be the concatenation of:
+- the binary representation of the ASCII string "\0VERSION\0"
+- the little endian representation of the version of the signature payload format
+- the binary representation of the ASCII string "\0PAYLOAD\0"
+- `data_n`
+- the binary representation of the ASCII string "\0PREVSIG\0"
+- `sig_n-1`
 
 #### Signature (one block)
 
@@ -832,9 +861,8 @@ TODO
 - `data_0` the serialized Datalog
 - `(pk_1, sk_1)` the next key pair, generated at random
 - `alg_1` the little endian representation of the signature algorithm fr `pk1, sk1` (see protobuf schema)
-- `sig_0 = sign(sk_0, data_0 + alg_1 + pk_1)`
 - the signed block version indicates the version of the signature payload format, either "block signature payload v0" or "block signature payload v1"
--  `sig_0` is the signature of the signature payload by `sk_0`
+-  `sig_0` is the signature of the payload by `sk_0`
 
 The token will contain:
 
@@ -869,7 +897,7 @@ The new block can optionally be signed by an external keypair `(epk, esk)` and c
 
 the signed block version indicates the version of the signature payload format, either "block signature payload v0" or "block signature payload v1".
 
-We generate at random `(pk_n+2, sk_n+2)` and the signature `sig_n+1` is the signature of the signature payload by `sk_n+1`.
+We generate at random `(pk_n+2, sk_n+2)` and the signature `sig_n+1` is the signature of the payload by `sk_n+1`.
 
 The token will contain:
 
@@ -923,7 +951,6 @@ Token {
   },
 }
 ```
-
 
 #### Verifying
 
