@@ -842,15 +842,15 @@ To sign the block at index `n+1`, the signed payload format is the concatenation
 - the little endian representation of the version of the signature payload format
 - the binary representation of the ASCII string "\0PAYLOAD\0"
 - `data_n+1`: the serialized Datalog
-- if `external_sig_n+1` is present:
-  - the binary representation of the ASCII string "\0EXTERNAL\0"
-  - `external_sig_n+1`: the optional external signature of the block
 - the binary representation of the ASCII string "\0PREVSIG\0"
 - `sig_n`: the signature of the previous block
 - the binary representation of the ASCII string "\0ALGORITHM\0"
 - `alg_n+2`: the little endian representation of the signature algorithm for `pk_n+2`
 - the binary representation of the ASCII string "\0NEXTKEY\0"
 - `pk_n+2`: the next public key
+- if `external_sig_n+1` is present:
+  - the binary representation of the ASCII string "\0EXTERNAL\0"
+  - `external_sig_n+1`: the optional external signature of the block
 
 the signed payload format for external signatures, thereafter referred as "external signature payload v1", i the concatenation of:
 - the binary representation of the ASCII string "\0VERSION\0"
