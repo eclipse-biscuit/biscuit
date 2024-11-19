@@ -479,7 +479,7 @@ Here are the currently defined unary operations:
   - `bool`
   - `set`
   - `null`
-- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language
+- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v6 only)
 
 Here are the currently defined binary operations:
 
@@ -514,7 +514,7 @@ Here are the currently defined binary operations:
 - _get_, defined on arrays and maps (v6 only)  
   on arrays, takes an integer and returns the corresponding element (or `null`, if out of bounds)  
   on maps, takes either an integer or a string and returns the corresponding element (or `null`, if out of bounds)
-- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language
+- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v6 only)
 
 Integer operations must have overflow checks. If it overflows, the expression
 fails.
@@ -523,7 +523,7 @@ Strict equality fails with a type error when trying to compare different types.
 
 Lenient equality returns false when trying to compare different types.
 
-External calls are implementation defined. External calls carry a function name, which can be used to call a user-defined function provided to the biscuit library.
+External calls are implementation defined. External calls carry a function name, which can be used to call a user-defined function provided to the biscuit library. The function name is an interned string, stored in the symbol table.
 
 #### Example
 
