@@ -2913,6 +2913,48 @@
           ]
         }
       }
+    },
+    {
+      "title": "test ffi calls (v6 blocks)",
+      "filename": "test035_ffi.bc",
+      "token": [
+        {
+          "symbols": [
+            "test",
+            "a",
+            "equal strings"
+          ],
+          "public_keys": [],
+          "external_key": null,
+          "code": "check if true.extern::test(), \"a\".extern::test(\"a\") == \"equal strings\";\n"
+        }
+      ],
+      "validations": {
+        "": {
+          "world": {
+            "facts": [],
+            "rules": [],
+            "checks": [
+              {
+                "origin": 0,
+                "checks": [
+                  "check if true.extern::test(), \"a\".extern::test(\"a\") == \"equal strings\""
+                ]
+              }
+            ],
+            "policies": [
+              "allow if true"
+            ]
+          },
+          "result": {
+            "Ok": 0
+          },
+          "authorizer_code": "allow if true;\n",
+          "revocation_ids": [
+            "faf26fe6f5dfa08c114a0a29321405b6fb7be79b0d80694d27925f7deb01effe5707600e42fd74f9a1d2920466446d51949155f4548f0fd68f3e9326c7e12404"
+          ]
+        }
+      }
     }
   ]
 }
