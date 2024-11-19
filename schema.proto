@@ -14,6 +14,7 @@ message SignedBlock {
   required PublicKey nextKey = 2;
   required bytes signature = 3;
   optional ExternalSignature externalSignature = 4;
+  optional uint32 version = 5;
 }
 
 message ExternalSignature {
@@ -218,6 +219,8 @@ message AuthorizerPolicies {
 message ThirdPartyBlockRequest {
   required PublicKey previousKey = 1;
   repeated PublicKey publicKeys = 2;
+  required bytes previousSignature = 3;
+
 }
 
 message ThirdPartyBlockContents {
