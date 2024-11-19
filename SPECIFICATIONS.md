@@ -854,7 +854,7 @@ To sign the block at index `n+1`, the signed payload format is the concatenation
   - the binary representation of the ASCII string "\0EXTERNALSIG\0"
   - `external_sig_n+1`: the optional external signature of the block
 
-the signed payload format for external signatures, thereafter referred as "external signature payload v1", i the concatenation of:
+the signed payload format for external signatures, thereafter referred as "external signature payload v1", is the concatenation of:
 - the binary representation of the ASCII string "\0EXTERNAL\0"
 - the binary representation of the ASCII string "\0VERSION\0"
 - the little endian representation of the version of the signature payload format
