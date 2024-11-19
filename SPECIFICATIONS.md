@@ -798,39 +798,28 @@ the `SignedBlock` message. If the field is absent, it defaults to version 0.
 
 This defines the block signature payload v0.
 
-To sign the authority block, we have:
+The authority block signature payload v0 is the concatenation of:
 - `data_0`: the serialized Datalog
 - `pk_1`: the next public key
 - `alg_1`: the little endian representation of the signature algorithm for `pk_1`
 
-The authority block signature payload v0 would be the concatenation of:
-- `data_0`
-- `pk_1`
-- `alg_1`
-
-To sign the block at index `n+1`, we have:
+To sign the block at index `n+1`, the signed payload format is the concatenation of:
 - `data_n+1`: the serialized Datalog
 - `pk_n+2`: the next public key
 - `alg_n+2`: the little endian representation of the signature algorithm for `pk_n+2`
+
+if `external_sig_n+1` is present, the signed payload format is instead the concatenation of:
+- `data_n+1`: the serialized Datalog
 - `external_sig_n+1`: the optional external signature of the block
-
-if `external_sig_n+1` is present, the signed payload format would be the concatenation of:
-- `data_n+1`
-- `external_sig_n+1`
-- `pk_n+2`
-- `alg_n+2`
-
-otherwise, we would have:
-- `data_n+1`
-- `pk_n+2`
-- `alg_n+2`
+- `pk_n+2`: the next public key
+- `alg_n+2`: the little endian representation of the signature algorithm for `pk_n+2`
 
 This format is deprecated and will be replaced by version 1 in the future.
 
-the signed payload format for external signatures, thereafter referred as "external signature payload v0", would be the concatenation of:
-- `data_n+1`
-- `pk_n+1`
-- `alg_n+1`
+the signed payload format for external signatures, thereafter referred as "external signature payload v0", is the concatenation of:
+- `data_n+1`: the serialized Datalog
+- `pk_n+1`: the public key for the next block
+- `alg_n+1`: the little endian representation of the signature algorithm for `pk_n+1`
 
 This format is not supported anymore and should be replaced by version 1.
 
@@ -838,50 +827,38 @@ This format is not supported anymore and should be replaced by version 1.
 
 This defines the block signature payload v1.
 
-To sign the authority block, we have:
+The authority block signature payload v1 is the concatenation of:
+- the binary representation of the ASCII string "\0VERSION\0"
+- the little endian representation of the version of the signature payload format
+- the binary representation of the ASCII string "\0PAYLOAD\0"
 - `data_0`: the serialized Datalog
-- `pk_1`: the next public key
-- `alg_1`: the little endian representation of the signature algorithm for `pk_1`
-
-The authority block signature payload v1 would be the concatenation of:
-- the binary representation of the ASCII string "\0VERSION\0"
-- the little endian representation of the version of the signature payload format
-- the binary representation of the ASCII string "\0PAYLOAD\0"
-- `data_0`
 - the binary representation of the ASCII string "\0ALGORITHM\0"
-- `alg_1`
+- `alg_1`: the little endian representation of the signature algorithm for `pk_1`
 - the binary representation of the ASCII string "\0NEXTKEY\0"
-- `pk_1`
+- `pk_1`: the next public key
 
-To sign the block at index `n+1`, we need:
-- `data_n+1`: the serialized Datalog
-- `pk_n+2`: the next public key
-- `alg_n+2`: the little endian representation of the signature algorithm for `pk_n+2`
-- `sig_n`: the signature of the previous block
-- `external_sig_n+1`: the optional external signature of the block
-
-The signed payload format would be the concatenation of:
+To sign the block at index `n+1`, the signed payload format is the concatenation of:
 - the binary representation of the ASCII string "\0VERSION\0"
 - the little endian representation of the version of the signature payload format
 - the binary representation of the ASCII string "\0PAYLOAD\0"
-- `data_n+1`
+- `data_n+1`: the serialized Datalog
 - if `external_sig_n+1` is present:
   - the binary representation of the ASCII string "\0EXTERNAL\0"
-  - `external_sig_n+1`
+  - `external_sig_n+1`: the optional external signature of the block
 - the binary representation of the ASCII string "\0PREVSIG\0"
-- `sig_n`
+- `sig_n`: the signature of the previous block
 - the binary representation of the ASCII string "\0ALGORITHM\0"
-- `alg_n+2`
+- `alg_n+2`: the little endian representation of the signature algorithm for `pk_n+2`
 - the binary representation of the ASCII string "\0NEXTKEY\0"
-- `pk_n+2`
+- `pk_n+2`: the next public key
 
-the signed payload format for external signatures, thereafter referred as "external signature payload v1", would be the concatenation of:
+the signed payload format for external signatures, thereafter referred as "external signature payload v1", i the concatenation of:
 - the binary representation of the ASCII string "\0VERSION\0"
 - the little endian representation of the version of the signature payload format
 - the binary representation of the ASCII string "\0PAYLOAD\0"
-- `data_n+1`
+- `data_n+1`: the serialized Datalog
 - the binary representation of the ASCII string "\0PREVSIG\0"
-- `sig_n`
+- `sig_n`: the signature of the previous block
 
 #### Signature (one block)
 
@@ -952,11 +929,7 @@ Blocks generated by a trusted third party can carry an *extra* signature to prov
 origin. Same as regular signatures, they rely on Ed25519.
 
 The external signature for block `n+1`, with `(external_pk, external_sk)` is `external_sig_n+1`, the signature of the payload in format "external signature payload v1" by `external_sk`.
-It is quite similar to the regular signature, with a crucial difference: the public key appended to the block payload is the one _carried_ by block `n` (and which is used to verify block `n+1`).
-This means that the authority block can't carry an external signature (that would be useless, since
-the root key is not ephemeral and can be trusted directly).
-
-This is necessary to make sure an external signature can't be used for any other token.
+The authority block can't carry an external signature. This is necessary to make sure an external signature can't be used for any other token.
 
 The presence of an external signature affects the regular signature: the external signature is part of the payload signed by the regular signature.
 
@@ -983,8 +956,8 @@ Token {
 #### Verifying
 
 For each block i from 0 to n:
-
-- verify(pk_i, sig_i, data_i + alg_i+1 + pk_i+1)
+- `payload_i`: the signature payload for block i
+- `verify(pk_i, sig_i, payload_i)`
 
 If all signatures are verified, extract pk_n+1 from the last block and
 sk_n+1 from the proof field, and check that they are from the same
@@ -993,8 +966,8 @@ key pair.
 ##### Verifying external signatures
 
 For each block i from 1 to n, _where an external signature is present_:
-
-- verify(external_pk_i, external_sig_i, data_i + alg_i + pk_i)
+- `external_payload_i`: the external signature payload for block i
+- `verify(external_pk_i, external_sig_i, external_payload_i)`
 
 #### Signature (sealing)
 
