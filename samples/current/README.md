@@ -2657,13 +2657,14 @@ result: `Err(FailedLogic(Unauthorized { policy: Allow(0), checks: [Block(FailedB
 ### token
 
 authority:
-symbols: ["abcD12", "abcD12x"]
+symbols: ["abcD12", "abcD12x", "fact", "value", "fact2"]
 
 public keys: []
 
 ```
 check if true == true;
-check if false != false;
+check if false == false;
+check if false != true;
 check if 1 != true;
 check if 1 == 1;
 check if 1 != 3;
@@ -2680,22 +2681,37 @@ check if hex:12abcd != true;
 check if {1, 2} == {1, 2};
 check if {1, 4} != {1, 2};
 check if {1, 4} != true;
+check if fact(1, $value), 1 == $value;
+check if fact2(1, $value), 1 != $value;
 ```
 
 ### validation
 
 authorizer code:
 ```
+fact(1, 1);
+fact2(1, 2);
+
 allow if true;
 ```
 
 revocation ids:
-- `4af245a2504ec00809bd0cd8d20ceaaac35f8ec5aaa8c7d3fd6652b126d2bf246d64fec8f0e65c409b196d4a60c9723dd4fbb3328988790e97fc4e08e9528208`
+- `899521bb50786bd40a21bf22c9362b021a9300e20cbf1b8b2f70bd1f5a9b01c420efeab85092f081db71ce7b7cebfc01b4a4f8f2294c478ce4c7f8813ffa5c0f`
 
 authorizer world:
 ```
 World {
-  facts: []
+  facts: [
+    Facts {
+        origin: {
+            None,
+        },
+        facts: [
+            "fact(1, 1)",
+            "fact2(1, 2)",
+        ],
+    },
+]
   rules: []
   checks: [
     Checks {
@@ -2713,7 +2729,10 @@ World {
             "check if 2022-12-04T09:46:41Z != 2020-12-04T09:46:41Z",
             "check if 2022-12-04T09:46:41Z != true",
             "check if 2022-12-04T09:46:41Z == 2022-12-04T09:46:41Z",
-            "check if false != false",
+            "check if fact(1, $value), 1 == $value",
+            "check if fact2(1, $value), 1 != $value",
+            "check if false != true",
+            "check if false == false",
             "check if hex:12abcd != hex:12ab",
             "check if hex:12abcd != true",
             "check if hex:12abcd == hex:12abcd",
@@ -2730,7 +2749,82 @@ World {
 }
 ```
 
-result: `Err(FailedLogic(Unauthorized { policy: Allow(0), checks: [Block(FailedBlockCheck { block_id: 0, check_id: 1, rule: "check if false != false" })] }))`
+result: `Ok(0)`
+### validation for "evaluate to false"
+
+authorizer code:
+```
+fact(1, 2);
+fact2(1, 1);
+
+check if false != false;
+
+allow if true;
+```
+
+revocation ids:
+- `899521bb50786bd40a21bf22c9362b021a9300e20cbf1b8b2f70bd1f5a9b01c420efeab85092f081db71ce7b7cebfc01b4a4f8f2294c478ce4c7f8813ffa5c0f`
+
+authorizer world:
+```
+World {
+  facts: [
+    Facts {
+        origin: {
+            None,
+        },
+        facts: [
+            "fact(1, 2)",
+            "fact2(1, 1)",
+        ],
+    },
+]
+  rules: []
+  checks: [
+    Checks {
+        origin: Some(
+            0,
+        ),
+        checks: [
+            "check if \"abcD12\" == \"abcD12\"",
+            "check if \"abcD12x\" != \"abcD12\"",
+            "check if \"abcD12x\" != true",
+            "check if 1 != 3",
+            "check if 1 != true",
+            "check if 1 != true",
+            "check if 1 == 1",
+            "check if 2022-12-04T09:46:41Z != 2020-12-04T09:46:41Z",
+            "check if 2022-12-04T09:46:41Z != true",
+            "check if 2022-12-04T09:46:41Z == 2022-12-04T09:46:41Z",
+            "check if fact(1, $value), 1 == $value",
+            "check if fact2(1, $value), 1 != $value",
+            "check if false != true",
+            "check if false == false",
+            "check if hex:12abcd != hex:12ab",
+            "check if hex:12abcd != true",
+            "check if hex:12abcd == hex:12abcd",
+            "check if true == true",
+            "check if {1, 2} == {1, 2}",
+            "check if {1, 4} != true",
+            "check if {1, 4} != {1, 2}",
+        ],
+    },
+    Checks {
+        origin: Some(
+            18446744073709551615,
+        ),
+        checks: [
+            "check if false != false",
+        ],
+    },
+]
+  policies: [
+    "allow if true",
+]
+}
+```
+
+result: `Err(FailedLogic(Unauthorized { policy: Allow(0), checks: [Authorizer(FailedAuthorizerCheck { check_id: 0, rule: "check if false != false" }), Block(FailedBlockCheck { block_id: 0, check_id: 19, rule: "check if fact(1, $value), 1 == $value" }), Block(FailedBlockCheck { block_id: 0, check_id: 20, rule: "check if fact2(1, $value), 1 != $value" })] }))`
 
 
 ------------------------------
@@ -2948,7 +3042,7 @@ result: `Ok(0)`
 
 ------------------------------
 
-## test array and map operations (v5 blocks): test034_array_map.bc
+## test array and map operations: test034_array_map.bc
 ### token
 
 authority:
