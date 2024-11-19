@@ -801,7 +801,7 @@ This defines the block signature payload v0.
 To sign the authority block, we have:
 - `data_0`: the serialized Datalog
 - `pk_1`: the next public key
-- `alg_1`: the little endian representation of the signature algorithm for `pk_n+1`
+- `alg_1`: the little endian representation of the signature algorithm for `pk_1`
 
 The authority block signature payload v0 would be the concatenation of:
 - `data_0`
@@ -811,7 +811,7 @@ The authority block signature payload v0 would be the concatenation of:
 To sign the block at index `n+1`, we have:
 - `data_n+1`: the serialized Datalog
 - `pk_n+2`: the next public key
-- `alg_n+2`: the little endian representation of the signature algorithm for `pk_n+1`
+- `alg_n+2`: the little endian representation of the signature algorithm for `pk_n+2`
 - `external_sig_n+1`: the optional external signature of the block
 
 if `external_sig_n+1` is present, the signed payload format would be the concatenation of:
@@ -841,7 +841,7 @@ This defines the block signature payload v1.
 To sign the authority block, we have:
 - `data_0`: the serialized Datalog
 - `pk_1`: the next public key
-- `alg_1`: the little endian representation of the signature algorithm for `pk_n+1`
+- `alg_1`: the little endian representation of the signature algorithm for `pk_1`
 
 The authority block signature payload v1 would be the concatenation of:
 - the binary representation of the ASCII string "\0VERSION\0"
