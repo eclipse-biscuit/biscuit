@@ -154,7 +154,7 @@
           "result": {
             "Err": {
               "Format": {
-                "InvalidSignatureSize": 16
+                "BlockSignatureDeserializationError": "block signature deserialization error: [117, 149, 161, 18, 161, 235, 91, 129, 166, 227, 152, 133, 46, 97, 24, 183]"
               }
             }
           },
@@ -2952,6 +2952,76 @@
           "authorizer_code": "allow if true;\n",
           "revocation_ids": [
             "faf26fe6f5dfa08c114a0a29321405b6fb7be79b0d80694d27925f7deb01effe5707600e42fd74f9a1d2920466446d51949155f4548f0fd68f3e9326c7e12404"
+          ]
+        }
+      }
+    },
+    {
+      "title": "ECDSA secp256r1 signatures",
+      "filename": "test036_secp256r1.bc",
+      "token": [
+        {
+          "symbols": [
+            "file1",
+            "file2"
+          ],
+          "public_keys": [],
+          "external_key": null,
+          "code": "right(\"file1\", \"read\");\nright(\"file2\", \"read\");\nright(\"file1\", \"write\");\n"
+        },
+        {
+          "symbols": [
+            "0"
+          ],
+          "public_keys": [],
+          "external_key": null,
+          "code": "check if resource($0), operation(\"read\"), right($0, \"read\");\n"
+        }
+      ],
+      "validations": {
+        "": {
+          "world": {
+            "facts": [
+              {
+                "origin": [
+                  null
+                ],
+                "facts": [
+                  "operation(\"read\")",
+                  "resource(\"file1\")"
+                ]
+              },
+              {
+                "origin": [
+                  0
+                ],
+                "facts": [
+                  "right(\"file1\", \"read\")",
+                  "right(\"file1\", \"write\")",
+                  "right(\"file2\", \"read\")"
+                ]
+              }
+            ],
+            "rules": [],
+            "checks": [
+              {
+                "origin": 1,
+                "checks": [
+                  "check if resource($0), operation(\"read\"), right($0, \"read\")"
+                ]
+              }
+            ],
+            "policies": [
+              "allow if true"
+            ]
+          },
+          "result": {
+            "Ok": 0
+          },
+          "authorizer_code": "resource(\"file1\");\noperation(\"read\");\n\nallow if true;\n",
+          "revocation_ids": [
+            "760785de30d7348e9c847aab8b3bdad6a0d463f4f50ed9667aade563e9112ee6d2f589630dd7553c2eced2a57edf3636d5c874b35df15120c62fddcbdbd2de09",
+            "30440220039667c7a4d964e4b449289dc8fd206d7aa0e77eb701a9253b3307d32c177fa8022023f7523c143c5fb55ee4cafe49804702ef05a70883ebf42185b54bd36a7e7cd4"
           ]
         }
       }
