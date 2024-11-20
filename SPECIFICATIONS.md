@@ -77,6 +77,8 @@ _predicates_ over the following types:
 - _boolean_
 - _null_
 - _set_ a deduplicated list of values of any type, except _variable_ or _set_
+- _array_ an array of values of any type, expect  _variable_ (nested arrays are allowed)
+- _map_ a map of key/value pairs. keys must be either strings or integers, values can be of any type, except _variable_ (nested maps are allowed)
 
 While a Biscuit token does not use a textual representation for storage, we
 use one for parsing and pretty printing of Datalog elements.
@@ -118,8 +120,10 @@ We will represent the various types as follows:
 - byte array: `hex:01A2`
 - date in RFC 3339 format: `1985-04-12T23:20:50.52Z`
 - boolean: `true` or `false`
-- null: `null`, supported since block version 5
-- set: `[ "a", "b", "c"]`
+- null: `null`, supported since block version 6
+- set: `{ "a", "b", "c"}`
+- array: `[ "a", true, null]`, supported since block version 6
+- map: `{ "a": true, 12: "a" }`, supported since block version 6
 
 As an example, assuming we have the following facts: `parent("a", "b")`,
 `parent("b", "c")`, `parent("c", "d")`. If we apply the rule
@@ -138,29 +142,33 @@ rules application does not generate any new facts, we can stop.
 #### Data types
 
 An _integer_ is a signed 64 bits integer. It supports the following operations:
-lower than, greater than, lower than or equal, greater than or equal, equal,
-not equal, set inclusion, addition, subtraction, mutiplication, division,
-bitwise and, bitwise or, bitwise xor.
+lower than, greater than, lower than or equal, greater than or equal, strict equal,
+strict not equal, set inclusion, addition, subtraction, mutiplication, division,
+bitwise and, bitwise or, bitwise xor, lenient equal, lenient not equal, typeof.
 
 A _string_ is a suite of UTF-8 characters. It supports the following
-operations: prefix, suffix, equal, not equal, set inclusion, regular
-expression, concatenation (with `+`), substring test (with `.contains()`).
+operations: prefix, suffix, strict equal, strict not equal, set inclusion, regular
+expression, concatenation (with `+`), substring test (with `.contains()`), lenient equal, lenient not equal, typeof.
 
 A _byte array_ is a suite of bytes. It supports the following
-operations: equal, not equal, set inclusion.
+operations: strict equal, strict not equal, set inclusion, lenient equal, lenient not equal, typeof.
 
 A _date_ is a 64 bit unsigned integer representing a UTC unix timestamp (number of seconds since 1970-01-01T00:00:00Z). It supports
-the following operations: `<`, `<=` (before), `>`, `>=` (after), equal,
-not equal, set inclusion.
+the following operations: `<`, `<=` (before), `>`, `>=` (after), strict equal,
+strict not equal, set inclusion, lenient equal, lenient not equal, typeof.
 
 A _boolean_ is `true` or `false`. It supports the following operations:
-`==`, `!=`, `||`, `&&`, set inclusion.
+`===` (strict equal), `!==` (strict not equal), eager or, eager and, set inclusion, `==` (lenient equal), `!=` (lenient not equal), typeof, short-circuiting or, short-circuiting and.
 
-A _null_ is a default type indicating the absence of value. It supports the operations `==` and `!=` with any other type. _null_ is always equal to itself, and not equal to any other type
+A _null_ is a default type indicating the absence of value. It supports `===` (strict equal), `!==` (strict not equal), `==` (lenient equal) and `!=` (lenient not equal), typeof. `null` is always equal to itself.
 
 A _set_ is a deduplicated list of terms of the same type. It cannot contain
-variables or other sets. It supports equal, not equal, , intersection, union,
-set inclusion.
+variables or other sets. It supports strict equal, strict not equal, intersection, union,
+set inclusion, lenient equal, lenient not equal, any, all, typeof.
+
+An _array_ is an ordered list of terms, not necessarily of the same type. It supports `===` (strict equal), `!==` (strict not equal), `==` (lenient equal) and `!=` (lenient not equal), contains, prefix, suffix, get, typeof.
+
+A _map_ is an unordered collection of key/value pairs, with unique keys. Keys are either strings or integers, values can be any term. It supports `===` (strict equal), `!==` (strict not equal), `==` (lenient equal) and `!=` (lenient not equal), contains, get, typeof.
 
 #### Grammar
 
@@ -197,16 +205,19 @@ The logic language is described by the following EBNF grammar:
 <boolean> ::= "true" | "false"
 <null> ::= "null"
 <date> ::= [0-9]* "-" [0-9] [0-9] "-" [0-9] [0-9] "T" [0-9] [0-9] ":" [0-9] [0-9] ":" [0-9] [0-9] ( "Z" | ( ("+" | "-") [0-9] [0-9] ":" [0-9] [0-9] ))
-<set> ::= "[" <sp>? ( <set_term> ( <sp>? "," <sp>? <set_term>)* <sp>? )? "]"
+<set> ::= "{" <sp>? ( <set_term> ( <sp>? "," <sp>? <set_term>)* <sp>? )? "}"
+<array> ::= "[" <sp>? ( <term> ( <sp>? "," <sp>? <term>)* <sp>? )? "]"
+<map_entry> ::= (<string> | <number>) <sp>? ":" <sp>? <term>
+<map> ::= "{" <sp>? ( <map_entry> ( <sp>? "," <sp>? <map_entry>)* <sp>? )? "}"
 
 <expression> ::= <expression_element> (<sp>? <operator> <sp>? <expression_element>)*
 <expression_element> ::= <expression_unary> | (<expression_term> <expression_method>? )
 <expression_unary> ::= "!" <sp>? <expression>
 <expression_method> ::= "." <method_name> "(" <sp>? (<term> ( <sp>? "," <sp>? <term>)* )? <sp>? ")"
-<method_name> ::= ([a-z] | [A-Z] ) ([a-z] | [A-Z] | [0-9] | "_" )*
+<method_name> ::= (extern::)?([a-z] | [A-Z] ) ([a-z] | [A-Z] | [0-9] | "_" )*
 
 <expression_term> ::= <term> | ("(" <sp>? <expression> <sp>? ")")
-<operator> ::= "<" | ">" | "<=" | ">=" | "==" | "!=" | "&&" | "||" | "+" | "-" | "*" | "/" | "&" | "|" | "^"
+<operator> ::= "<" | ">" | "<=" | ">=" | "===" | "!==" | "&&" | "||" | "+" | "-" | "*" | "/" | "&" | "|" | "^" | "==" | "!=="
 
 <sp> ::= (" " | "\t" | "\n")+
 ```
@@ -305,7 +316,7 @@ succeeds (in the case of `reject if`, the check will fail if any query matches).
 - a `reject if` query succeeds if no set of facts matches the body and expressions
 
 `check all` can only be used starting from block version 4.  
-`reject if` can only be used starting from block version 5.
+`reject if` can only be used starting from block version 6.
 
 Here are some examples of writing checks:
 
@@ -429,7 +440,7 @@ rule.
 #### Execution
 
 Expressions are internally represented as a series of opcodes for a stack based
-virtual machine. There are three kinds of opcodes:
+virtual machine. There are four kinds of opcodes:
 
 - _value_: a raw value of any type. If it is a variable, the variable must also
   appear in a predicate, so the variable gets a real value for execution. When
@@ -438,8 +449,21 @@ virtual machine. There are three kinds of opcodes:
   it pops a value from the stack, applies the operation, then pushes the result
 - _binary operation_: an operation that applies on two arguments. When executed,
   it pops two values from the stack, applies the operation, then pushes the result
+- _closure_: a function definition containing the name of parameters and the body of the function expressed as a list of opcodes. Closures can be nested.
 
 After executing, the stack must contain only one value, of the boolean type.
+
+##### Closures
+
+Closures are evaluated recursively. When executing a closure, a new empty stack is created, and the closure opcodes are evaluated. After evaluation, the stack must contain only one value, of any type, which is then pushed on the parent stack.
+
+The closure arguments are treated the same way as datalog variables and are replaced by their value when the corresponding opcode is evaluated.
+
+Shadowing (defining a parameter with the same name as a variable already in scope) is not allowed and should be rejected before starting the evaluation.
+
+Short-circuiting boolean operators (`&&` and `||`) are implemented using closures: the right-hand side is defined in a closure (taking zero arguments) and is only evaluated as needed.
+
+##### Operations
 
 Here are the currently defined unary operations:
 
@@ -447,6 +471,15 @@ Here are the currently defined unary operations:
 - _parens_: returns its argument without modification (this is used when printing
   the expression, to avoid precedence errors)
 - _length_: defined on strings, byte arrays and sets (for strings, _length_ is defined as the number of bytes in the UTF-8 encoded string; the alternative of counting grapheme clusters would be inconsistent between languages)
+- _type_, defined on all types, returns a string (v6 only)
+  - `integer`
+  - `string`
+  - `date`
+  - `bytes`
+  - `bool`
+  - `set`
+  - `null`
+- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v6 only)
 
 Here are the currently defined binary operations:
 
@@ -454,8 +487,8 @@ Here are the currently defined binary operations:
 - _greater than_, defined on integers and dates, returns a boolean
 - _less or equal_, defined on integers and dates, returns a boolean
 - _greater or equal_, defined on integers and dates, returns a boolean
-- _equal_, defined on integers, strings, byte arrays, dates, set, returns a boolean
-- _not equal_, defined on integers, strings, byte arrays, dates, set, returns a boolean (v4 only)
+- _strict equal_, defined on integers, strings, byte arrays, dates, set, null, returns a boolean
+- _strict not equal_, defined on integers, strings, byte arrays, dates, set, null, returns a boolean (v4 only)
 - _contains_ takes a set and another value as argument, returns a boolean. Between two sets, indicates if the first set is a superset of the second one.
   between two strings, indicates a substring test.
 - _prefix_, defined on strings, returns a boolean
@@ -465,33 +498,92 @@ Here are the currently defined binary operations:
 - _sub_, defined on integers, returns an integer
 - _mul_, defined on integers, returns an integer
 - _div_, defined on integers, returns an integer
-- _and_, defined on booleans, returns a boolean
-- _or_, defined on booleans, returns a boolean
+- _eager and_, defined on booleans, returns a boolean
+- _eager or_, defined on booleans, returns a boolean
 - _intersection_, defined on sets, return a set that is the intersection of both arguments
 - _union_, defined on sets, return a set that is the union of both arguments
 - _bitwiseAnd_, defined on integers, returns an integer (v4 only)
 - _bitwiseOr_, defined on integers, returns an integer (v4 only)
 - _bitwiseXor_, defined on integers, returns an integer (v4 only)
+- _lenient equal_, defined on all types, returns a boolean (v6 only)
+- _lenient not equal_, defined on all types, returns a boolean (v6 only)
+- _any_, defined on sets, takes a closure term -> boolean, returns a boolean (v6 only)
+- _all_, defined on sets, takes a closure term -> boolean, returns a boolean (v6 only)
+- _short circuiting and_, defined on booleans, takes a closure () -> boolean, returns a boolean (v6 only)
+- _short circuiting or_, defined on booleans, takes a closure () -> boolean, returns a boolean (v6 only)
+- _get_, defined on arrays and maps (v6 only)  
+  on arrays, takes an integer and returns the corresponding element (or `null`, if out of bounds)  
+  on maps, takes either an integer or a string and returns the corresponding element (or `null`, if out of bounds)
+- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v6 only)
 
 Integer operations must have overflow checks. If it overflows, the expression
 fails.
 
+Strict equality fails with a type error when trying to compare different types.
+
+Lenient equality returns false when trying to compare different types.
+
+External calls are implementation defined. External calls carry a function name, which can be used to call a user-defined function provided to the biscuit library. The function name is an interned string, stored in the symbol table.
+
 #### Example
 
-The expression `1 + 2 < 4` will translate to the following opcodes: 1, 2, +, 4, <
+The expression `$a + 2 < 4` will translate to the following opcodes: $a, 2, +, 4, <
 
-Here is how it would be executed:
+Here is how it would be executed, given $a is bound to the value 1:
 
 ```
+Context: a ~> 1
 Op | stack
    | [ ]
-1  | [ 1 ]
+$a | [ 1 ]
 2  | [ 2, 1 ]
 +  | [ 3 ]
 4  | [ 4, 3 ]
 <  | [ true ]
 ```
 
+The stack contains only one value, and it is `true`: the expression succeeds.
+
+##### Closures
+
+The expression `[1,2].any($x -> $x == $a)` will translate to the following opcodes: [1,2], x->[$x, $a, ==], any.
+
+Here is how it would be executed, given $a is bound to the value 2:
+
+```
+Context: a ~> 2
+Op            | stack
+              | [ ]
+[1,2]         | [ [1,2] ]
+x->[$x,$a,==] | [ x->[$x,$a,==],[1,2] ]
+any           | … starting recursive evaluation …
+
+
+Beginning new evaluation
+Context: a ~> 2, x ~> 1
+Op | stack
+   | []
+$x | [ 1 ]
+$a | [ 2, 1 ]
+== | [ false ]
+
+The stack contains one value, false. So the evaluation must continue with the next set element.
+
+Beggining new evaluation
+Context: a ~> 2, x ~> 2
+Op | stack
+   | []
+$x | [ 2 ]
+$a | [ 2, 2 ]
+== | [ true ]
+
+The stack contains one value, true. The evaluation can stop here, the evaluation of any can return true.
+
+Resuming parent stack
+Context: a ~> 2
+Op  | stack
+any | true
+```
 The stack contains only one value, and it is `true`: the expression succeeds.
 
 ### Datalog fact generation
@@ -607,6 +699,7 @@ message SignedBlock {
   required PublicKey nextKey = 2;
   required bytes signature = 3;
   optional ExternalSignature externalSignature = 4;
+  optional uint32 version = 5;
 }
 
 message ExternalSignature {
@@ -638,7 +731,8 @@ for signature verification.
 
 Each block contains a serialized byte array of the Datalog data (`block`),
 the next public key (`nextKey`) and the signature of that block and key
-by the previous key.
+by the previous key. The `version` field indicates the version of the signature
+payload format.
 
 The `proof` field contains either the private key corresponding to the
 public key in the last block (attenuable tokens) or a signature of the last
@@ -738,13 +832,88 @@ ECDSA-Sig-Value ::= SEQUENCE {
 }
 ```
 
+#### Signed payload generation
+
+The data covered by the signature algorithm depends on the `version` field of
+the `SignedBlock` message. If the field is absent, it defaults to version 0.
+
+##### Version 0 (deprecated)
+
+This defines the block signature payload v0.
+
+The authority block signature payload v0 is the concatenation of:
+- `data_0`: the serialized Datalog
+- `pk_1`: the next public key
+- `alg_1`: the little endian representation of the signature algorithm for `pk_1`
+
+To sign the block at index `n+1`, the signed payload format is the concatenation of:
+- `data_n+1`: the serialized Datalog
+- `pk_n+2`: the next public key
+- `alg_n+2`: the little endian representation of the signature algorithm for `pk_n+2`
+
+if `external_sig_n+1` is present, the signed payload format is instead the concatenation of:
+- `data_n+1`: the serialized Datalog
+- `external_sig_n+1`: the optional external signature of the block
+- `pk_n+2`: the next public key
+- `alg_n+2`: the little endian representation of the signature algorithm for `pk_n+2`
+
+This format is deprecated and will be replaced by version 1 in the future.
+
+the signed payload format for external signatures, thereafter referred as "external signature payload v0", is the concatenation of:
+- `data_n+1`: the serialized Datalog
+- `pk_n+1`: the public key for the next block
+- `alg_n+1`: the little endian representation of the signature algorithm for `pk_n+1`
+
+This format is not supported anymore and should be replaced by version 1.
+
+##### Version 1
+
+This defines the block signature payload v1.
+
+The authority block signature payload v1 is the concatenation of:
+- the binary representation of the ASCII string "\0BLOCK\0"
+- the binary representation of the ASCII string "\0VERSION\0"
+- the little endian representation of the version of the signature payload format
+- the binary representation of the ASCII string "\0PAYLOAD\0"
+- `data_0`: the serialized Datalog
+- the binary representation of the ASCII string "\0ALGORITHM\0"
+- `alg_1`: the little endian representation of the signature algorithm for `pk_1`
+- the binary representation of the ASCII string "\0NEXTKEY\0"
+- `pk_1`: the next public key
+
+To sign the block at index `n+1`, the signed payload format is the concatenation of:
+- the binary representation of the ASCII string "\0BLOCK\0"
+- the binary representation of the ASCII string "\0VERSION\0"
+- the little endian representation of the version of the signature payload format
+- the binary representation of the ASCII string "\0PAYLOAD\0"
+- `data_n+1`: the serialized Datalog
+- the binary representation of the ASCII string "\0ALGORITHM\0"
+- `alg_n+2`: the little endian representation of the signature algorithm for `pk_n+2`
+- the binary representation of the ASCII string "\0NEXTKEY\0"
+- `pk_n+2`: the next public key
+- the binary representation of the ASCII string "\0PREVSIG\0"
+- `sig_n`: the signature of the previous block
+- if `external_sig_n+1` is present:
+  - the binary representation of the ASCII string "\0EXTERNALSIG\0"
+  - `external_sig_n+1`: the optional external signature of the block
+
+the signed payload format for external signatures, thereafter referred as "external signature payload v1", is the concatenation of:
+- the binary representation of the ASCII string "\0EXTERNAL\0"
+- the binary representation of the ASCII string "\0VERSION\0"
+- the little endian representation of the version of the signature payload format
+- the binary representation of the ASCII string "\0PAYLOAD\0"
+- `data_n+1`: the serialized Datalog
+- the binary representation of the ASCII string "\0PREVSIG\0"
+- `sig_n`: the signature of the previous block
+
 #### Signature (one block)
 
 - `(pk_0, sk_0)` the root public and private keys
 - `data_0` the serialized Datalog
 - `(pk_1, sk_1)` the next key pair, generated at random
 - `alg_1` the little endian representation of the signature algorithm fr `pk1, sk1` (see protobuf schema)
-- `sig_0 = sign(sk_0, data_0 + alg_1 + pk_1)`
+- the signed block version indicates the version of the signature payload format, either "block signature payload v0" or "block signature payload v1"
+-  `sig_0` is the signature of the payload by `sk_0`
 
 The token will contain:
 
@@ -777,7 +946,9 @@ The token also contains `sk_n+1`.
 
 The new block can optionally be signed by an external keypair `(epk, esk)` and carry an external signature `esig`.
 
-We generate at random `(pk_n+2, sk_n+2)` and the signature `sig_n+1 = sign(sk_n+1, data_n+1 + esig? + alg_n+2 + pk_n+2)`. If the block is not signed by an external keypair, then `esig` is not part of the signed payload.
+the signed block version indicates the version of the signature payload format, either "block signature payload v0" or "block signature payload v1".
+
+We generate at random `(pk_n+2, sk_n+2)` and the signature `sig_n+1` is the signature of the payload by `sk_n+1`.
 
 The token will contain:
 
@@ -803,12 +974,8 @@ Token {
 Blocks generated by a trusted third party can carry an *extra* signature to provide a proof of their
 origin. Same as regular signatures, they rely on public key cryptography.
 
-The external signature for block `n+1`, with `(external_pk, external_sk)` is `external_sig_n+1 = sign(external_sk, data_n+1 + alg_n+1 + pk_n+1)`.
-It's quite similar to the regular signature, with a crucial difference: the public key appended to the block payload is the one _carried_ by block `n` (and which is used to verify block `n+1`).
-This means that the authority block can't carry an external signature (that would be useless, since
-the root key is not ephemeral and can be trusted directly).
-
-This is necessary to make sure an external signature can't be used for any other token.
+The external signature for block `n+1`, with `(external_pk, external_sk)` is `external_sig_n+1`, the signature of the payload in format "external signature payload v1" by `external_sk`.
+The authority block can't carry an external signature. This is necessary to make sure an external signature can't be used for any other token.
 
 The presence of an external signature affects the regular signature: the external signature is part of the payload signed by the regular signature.
 
@@ -832,12 +999,11 @@ Token {
 }
 ```
 
-
 #### Verifying
 
 For each block i from 0 to n:
-
-- verify(pk_i, sig_i, data_i + alg_i+1 + pk_i+1)
+- `payload_i`: the signature payload for block i
+- `verify(pk_i, sig_i, payload_i)`
 
 If all signatures are verified, extract pk_n+1 from the last block and
 sk_n+1 from the proof field, and check that they are from the same
@@ -846,8 +1012,8 @@ key pair.
 ##### Verifying external signatures
 
 For each block i from 1 to n, _where an external signature is present_:
-
-- verify(external_pk_i, external_sig_i, data_i + alg_i + pk_i)
+- `external_payload_i`: the external signature payload for block i
+- `verify(external_pk_i, external_sig_i, external_payload_i)`
 
 #### Signature (sealing)
 
@@ -1013,6 +1179,7 @@ To support this use-case, the protobuf schema defines two message types: `ThirdP
 message ThirdPartyBlockRequest {
   required PublicKey previousKey = 1;
   repeated PublicKey publicKeys = 2;
+  required bytes previousSignature = 3;
 }
 
 message ThirdPartyBlockContents {

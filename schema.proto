@@ -14,6 +14,7 @@ message SignedBlock {
   required PublicKey nextKey = 2;
   required bytes signature = 3;
   optional ExternalSignature externalSignature = 4;
+  optional uint32 version = 5;
 }
 
 message ExternalSignature {
@@ -81,6 +82,7 @@ message CheckV2 {
   enum Kind {
     One = 0;
     All = 1;
+    Reject = 2;
   }
 }
 
@@ -98,11 +100,34 @@ message TermV2 {
     bytes bytes = 5;
     bool bool = 6;
     TermSet set = 7;
+    Empty null = 8;
+    Array array = 9;
+    Map map = 10;
   }
 }
 
 message TermSet {
   repeated TermV2 set = 1;
+}
+
+message Array {
+  repeated TermV2 array = 1;
+}
+
+message Map {
+  repeated MapEntry entries = 1;
+}
+
+message MapEntry {
+  required MapKey key = 1;
+  required TermV2 value = 2;
+}
+
+message MapKey {
+  oneof Content {
+    int64 integer = 1;
+    uint64 string = 2;
+  }
 }
 
 message ExpressionV2 {
@@ -114,6 +139,7 @@ message Op {
     TermV2 value = 1;
     OpUnary unary = 2;
     OpBinary Binary = 3;
+    OpClosure closure = 4;
   }
 }
 
@@ -122,9 +148,12 @@ message OpUnary {
     Negate = 0;
     Parens = 1;
     Length = 2;
+    TypeOf = 3;
+    Ffi = 4;
   }
 
   required Kind kind = 1;
+  optional uint64 ffiName = 2;
 }
 
 message OpBinary {
@@ -150,9 +179,23 @@ message OpBinary {
     BitwiseOr = 18;
     BitwiseXor = 19;
     NotEqual = 20;
+    HeterogeneousEqual = 21;
+    HeterogeneousNotEqual = 22;
+    LazyAnd = 23;
+    LazyOr = 24;
+    All = 25;
+    Any = 26;
+    Get = 27;
+    Ffi = 28;
   }
 
   required Kind kind = 1;
+  optional uint64 ffiName = 2;
+}
+
+message OpClosure {
+  repeated uint32 params = 1;
+  repeated Op ops = 2;
 }
 
 message Policy {
@@ -177,6 +220,8 @@ message AuthorizerPolicies {
 message ThirdPartyBlockRequest {
   required PublicKey previousKey = 1;
   repeated PublicKey publicKeys = 2;
+  required bytes previousSignature = 3;
+
 }
 
 message ThirdPartyBlockContents {
