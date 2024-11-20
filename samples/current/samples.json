@@ -2958,7 +2958,7 @@
     },
     {
       "title": "ECDSA secp256r1 signatures",
-      "filename": "test031_secp256r1.bc",
+      "filename": "test036_secp256r1.bc",
       "token": [
         {
           "symbols": [

@@ -2457,6 +2457,7 @@ World {
 
 result: `Err(FailedLogic(Unauthorized { policy: Allow(0), checks: [Block(FailedBlockCheck { block_id: 0, check_id: 0, rule: "reject if test($test), $test" })] }))`
 
+
 ------------------------------
 
 ## test null: test030_null.bc
@@ -2649,90 +2650,6 @@ World {
 
 result: `Err(FailedLogic(Unauthorized { policy: Allow(0), checks: [Block(FailedBlockCheck { block_id: 0, check_id: 0, rule: "check if fact(null, $value), $value == null" }), Block(FailedBlockCheck { block_id: 0, check_id: 1, rule: "reject if fact(null, $value), $value != null" })] }))`
 
-
-------------------------------
-
-## ECDSA secp256r1 signatures: test031_secp256r1.bc
-### token
-
-authority:
-symbols: ["file1", "file2"]
-
-public keys: []
-
-```
-right("file1", "read");
-right("file2", "read");
-right("file1", "write");
-```
-
-1:
-symbols: ["0"]
-
-public keys: []
-
-```
-check if resource($0), operation("read"), right($0, "read");
-```
-
-### validation
-
-authorizer code:
-```
-resource("file1");
-operation("read");
-
-allow if true;
-```
-
-revocation ids:
-- `760785de30d7348e9c847aab8b3bdad6a0d463f4f50ed9667aade563e9112ee6d2f589630dd7553c2eced2a57edf3636d5c874b35df15120c62fddcbdbd2de09`
-- `30440220039667c7a4d964e4b449289dc8fd206d7aa0e77eb701a9253b3307d32c177fa8022023f7523c143c5fb55ee4cafe49804702ef05a70883ebf42185b54bd36a7e7cd4`
-
-authorizer world:
-```
-World {
-  facts: [
-    Facts {
-        origin: {
-            None,
-        },
-        facts: [
-            "operation(\"read\")",
-            "resource(\"file1\")",
-        ],
-    },
-    Facts {
-        origin: {
-            Some(
-                0,
-            ),
-        },
-        facts: [
-            "right(\"file1\", \"read\")",
-            "right(\"file1\", \"write\")",
-            "right(\"file2\", \"read\")",
-        ],
-    },
-]
-  rules: []
-  checks: [
-    Checks {
-        origin: Some(
-            1,
-        ),
-        checks: [
-            "check if resource($0), operation(\"read\"), right($0, \"read\")",
-        ],
-    },
-]
-  policies: [
-    "allow if true",
-]
-}
-```
-
-result: `Ok(0)`
 
 ------------------------------
 
@@ -3259,6 +3176,91 @@ World {
         ),
         checks: [
             "check if true.extern::test(), \"a\".extern::test(\"a\") == \"equal strings\"",
+        ],
+    },
+]
+  policies: [
+    "allow if true",
+]
+}
+```
+
+result: `Ok(0)`
+
+
+------------------------------
+
+## ECDSA secp256r1 signatures: test036_secp256r1.bc
+### token
+
+authority:
+symbols: ["file1", "file2"]
+
+public keys: []
+
+```
+right("file1", "read");
+right("file2", "read");
+right("file1", "write");
+```
+
+1:
+symbols: ["0"]
+
+public keys: []
+
+```
+check if resource($0), operation("read"), right($0, "read");
+```
+
+### validation
+
+authorizer code:
+```
+resource("file1");
+operation("read");
+
+allow if true;
+```
+
+revocation ids:
+- `760785de30d7348e9c847aab8b3bdad6a0d463f4f50ed9667aade563e9112ee6d2f589630dd7553c2eced2a57edf3636d5c874b35df15120c62fddcbdbd2de09`
+- `30440220039667c7a4d964e4b449289dc8fd206d7aa0e77eb701a9253b3307d32c177fa8022023f7523c143c5fb55ee4cafe49804702ef05a70883ebf42185b54bd36a7e7cd4`
+
+authorizer world:
+```
+World {
+  facts: [
+    Facts {
+        origin: {
+            None,
+        },
+        facts: [
+            "operation(\"read\")",
+            "resource(\"file1\")",
+        ],
+    },
+    Facts {
+        origin: {
+            Some(
+                0,
+            ),
+        },
+        facts: [
+            "right(\"file1\", \"read\")",
+            "right(\"file1\", \"write\")",
+            "right(\"file2\", \"read\")",
+        ],
+    },
+]
+  rules: []
+  checks: [
+    Checks {
+        origin: Some(
+            1,
+        ),
+        checks: [
+            "check if resource($0), operation(\"read\"), right($0, \"read\")",
         ],
     },
 ]
