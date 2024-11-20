@@ -120,10 +120,10 @@ We will represent the various types as follows:
 - byte array: `hex:01A2`
 - date in RFC 3339 format: `1985-04-12T23:20:50.52Z`
 - boolean: `true` or `false`
-- null: `null`, supported since block version 6
+- null: `null`, supported since v3.3
 - set: `{ "a", "b", "c"}`
-- array: `[ "a", true, null]`, supported since block version 6
-- map: `{ "a": true, 12: "a" }`, supported since block version 6
+- array: `[ "a", true, null]`, supported since v3.3
+- map: `{ "a": true, 12: "a" }`, supported since v3.3
 
 As an example, assuming we have the following facts: `parent("a", "b")`,
 `parent("b", "c")`, `parent("c", "d")`. If we apply the rule
@@ -315,8 +315,8 @@ succeeds (in the case of `reject if`, the check will fail if any query matches).
 - a `check all` query succeeds if all the sets of facts that match the body also succeed the expression.
 - a `reject if` query succeeds if no set of facts matches the body and expressions
 
-`check all` can only be used starting from block version 4.  
-`reject if` can only be used starting from block version 6.
+`check all` can only be used starting from `v3.1`.
+`reject if` can only be used starting from `v3.3`.
 
 Here are some examples of writing checks:
 
@@ -471,7 +471,7 @@ Here are the currently defined unary operations:
 - _parens_: returns its argument without modification (this is used when printing
   the expression, to avoid precedence errors)
 - _length_: defined on strings, byte arrays and sets (for strings, _length_ is defined as the number of bytes in the UTF-8 encoded string; the alternative of counting grapheme clusters would be inconsistent between languages)
-- _type_, defined on all types, returns a string (v6 only)
+- _type_, defined on all types, returns a string (v3.3+)
   - `integer`
   - `string`
   - `date`
@@ -479,7 +479,7 @@ Here are the currently defined unary operations:
   - `bool`
   - `set`
   - `null`
-- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v6 only)
+- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v3.3+)
 
 Here are the currently defined binary operations:
 
@@ -488,7 +488,7 @@ Here are the currently defined binary operations:
 - _less or equal_, defined on integers and dates, returns a boolean
 - _greater or equal_, defined on integers and dates, returns a boolean
 - _strict equal_, defined on integers, strings, byte arrays, dates, set, null, returns a boolean
-- _strict not equal_, defined on integers, strings, byte arrays, dates, set, null, returns a boolean (v4 only)
+- _strict not equal_, defined on integers, strings, byte arrays, dates, set, null, returns a boolean (v3.1+)
 - _contains_ takes a set and another value as argument, returns a boolean. Between two sets, indicates if the first set is a superset of the second one.
   between two strings, indicates a substring test.
 - _prefix_, defined on strings, returns a boolean
@@ -502,19 +502,19 @@ Here are the currently defined binary operations:
 - _eager or_, defined on booleans, returns a boolean
 - _intersection_, defined on sets, return a set that is the intersection of both arguments
 - _union_, defined on sets, return a set that is the union of both arguments
-- _bitwiseAnd_, defined on integers, returns an integer (v4 only)
-- _bitwiseOr_, defined on integers, returns an integer (v4 only)
-- _bitwiseXor_, defined on integers, returns an integer (v4 only)
-- _lenient equal_, defined on all types, returns a boolean (v6 only)
-- _lenient not equal_, defined on all types, returns a boolean (v6 only)
-- _any_, defined on sets, takes a closure term -> boolean, returns a boolean (v6 only)
-- _all_, defined on sets, takes a closure term -> boolean, returns a boolean (v6 only)
-- _short circuiting and_, defined on booleans, takes a closure () -> boolean, returns a boolean (v6 only)
-- _short circuiting or_, defined on booleans, takes a closure () -> boolean, returns a boolean (v6 only)
-- _get_, defined on arrays and maps (v6 only)  
+- _bitwiseAnd_, defined on integers, returns an integer (v3.1+)
+- _bitwiseOr_, defined on integers, returns an integer (v3.1+)
+- _bitwiseXor_, defined on integers, returns an integer (v3.1+)
+- _lenient equal_, defined on all types, returns a boolean (v3.3+)
+- _lenient not equal_, defined on all types, returns a boolean (v3.3+)
+- _any_, defined on sets, takes a closure term -> boolean, returns a boolean (v3.3+)
+- _all_, defined on sets, takes a closure term -> boolean, returns a boolean (v3.3+)
+- _short circuiting and_, defined on booleans, takes a closure () -> boolean, returns a boolean (v3.3+)
+- _short circuiting or_, defined on booleans, takes a closure () -> boolean, returns a boolean (v3.3+)
+- _get_, defined on arrays and maps (v3.3+)
   on arrays, takes an integer and returns the corresponding element (or `null`, if out of bounds)  
   on maps, takes either an integer or a string and returns the corresponding element (or `null`, if out of bounds)
-- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v6 only)
+- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v3.3+)
 
 Integer operations must have overflow checks. If it overflows, the expression
 fails.
@@ -754,7 +754,7 @@ message Block {
 }
 ```
 
-Each block contains a `version` field, indicating at which format version it
+Each block contains a `version` field, indicating at which datalog version it
 was generated. Since a Biscuit implementation at version N can receive a valid
 token generated at version N-1, new implementations must be able to recognize
 older formats. Moreover, when appending a new block, they cannot convert the
@@ -766,12 +766,19 @@ each block must carry its own version.
 - An implementation may generate blocks with older formats to help with backwards compatibility,
   when possible, especially for biscuit versions that are only additive in terms of features.
 
-- The lowest supported biscuit version is `3`;
-- The highest supported biscuit version is `5`;
+The format version is encoded as a single integer:
 
-# Version 2
+- `v3.0` is encoded as `3`
+- `v3.1` is encoded as `4`
+- `v3.2` is encoded as `5`
+- `v3.3` is encoded as `6`
 
-This is the format for the 2.0 version of Biscuit.
+- The lowest supported datalog version is `v3.0`;
+- The highest supported datalog version is `v3.3`;
+
+# Format
+
+This is the format for the 3.x version of Biscuit.
 
 It transport expressions as an array of opcodes.
 
@@ -837,6 +844,8 @@ ECDSA-Sig-Value ::= SEQUENCE {
 The data covered by the signature algorithm depends on the `version` field of
 the `SignedBlock` message. If the field is absent, it defaults to version 0.
 
+Signature version 1 *must* be used for third-party blocks.
+
 ##### Version 0 (deprecated)
 
 This defines the block signature payload v0.
@@ -857,9 +866,9 @@ if `external_sig_n+1` is present, the signed payload format is instead the conca
 - `pk_n+2`: the next public key
 - `alg_n+2`: the little endian representation of the signature algorithm for `pk_n+2`
 
-This format is deprecated and will be replaced by version 1 in the future.
+This format is deprecated and will be gradually replaced by version 1.
 
-the signed payload format for external signatures, thereafter referred as "external signature payload v0", is the concatenation of:
+The signed payload format for external signatures, thereafter referred as "external signature payload v0", is the concatenation of:
 - `data_n+1`: the serialized Datalog
 - `pk_n+1`: the public key for the next block
 - `alg_n+1`: the little endian representation of the signature algorithm for `pk_n+1`
@@ -1133,7 +1142,7 @@ block in order, the block's symbols.
 It is important to verify that different blocks do not contain the same symbol in
 their list.
 
-##### 3rd party blocks (with an external signature)
+##### third party blocks (with an external signature)
 
 Blocks that are signed by an external key don't use the token symbol table
 and start from the default symbol table. Following blocks ignore the symbols
@@ -1148,7 +1157,7 @@ Public keys carried in `SignedBlock`s are stored as is, as they are required for
 
 Public keys carried in datalog scope annotations are stored in a table, to reduce token size.
 
-Public keys are interned the same way for first-party and third-party tokens, unlike symbols.
+Third-party blocks use an isolated public keys table, same as for symbols.
 
 #### Reading
 
@@ -1171,14 +1180,14 @@ that were not present in the table yet.
 
 Third party blocks are special blocks, that are meant to be signed by a trusted party, to either expand a token or fulfill special checks with dedicated public key constraints.
 
-Unlike first-party blocks, the party signing the token should not have access to the token itself. The third party needs however some context in order to be able to properly serialize and sign block contents. Additionally, the third party needs to return both the serialized block and the external signature.
+Unlike first-party blocks, the party signing the token should not have access to the token itself. The third party needs however some context in order to be able to properly sign block contents. Additionally, the third party needs to return both the serialized block and the external signature.
 
 To support this use-case, the protobuf schema defines two message types: `ThirdPartyBlockRequest` and `ThirdPartyBlockContents`:
 
 ```
 message ThirdPartyBlockRequest {
-  required PublicKey previousKey = 1;
-  repeated PublicKey publicKeys = 2;
+  optional PublicKey legacyPreviousKey = 1;
+  repeated PublicKey legacyPublicKeys = 2;
   required bytes previousSignature = 3;
 }
 
@@ -1190,8 +1199,9 @@ message ThirdPartyBlockContents {
 
 `ThirdPartyBlockRequest` contains the necessary context for serializing and signing a datalog block:
 
-- `previousKey` is needed for the signature (it makes sure that a third-party block can only be used for a specific biscuit token
-- `publicKeys` is the list of public keys already present in the token table; they are used for serialization
+- `legacyPreviousKey` was needed for the signature. It is not needed anymore with `v1` signatures and must be empty.
+- `legacyPublicKeys` was needed for serialization but is not used anymore, it must be empty.
+- `previousSignature` is needed for the signature (to make sure that a third-party block can only be used for a specific biscuit token)
 
 `ThirdPartyBlockContents` contains both the serialized `Block` and the external signature.
 
@@ -1210,6 +1220,10 @@ An implementation must be able to:
 
 Same as biscuit tokens, the `ThirdPartyBlockRequest` and `ThirdPartyBlockContents` values can be transfered in text format
 by encoding them with base64url.
+
+### Third-party block datalog version
+
+Third-party blocks must at least have datalog version `3.2` (implementations not supporting at least version `3.2` have different symbol tables mechanisms and may interpret third-party blocks incorrectly).
 
 ## Test cases
 
