@@ -13,6 +13,8 @@ symbols: ["file1", "file2"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 right("file2", "read");
@@ -23,6 +25,8 @@ right("file1", "write");
 symbols: ["0"]
 
 public keys: []
+
+block version: 3
 
 ```
 check if resource($0), operation("read"), right($0, "read");
@@ -96,6 +100,8 @@ symbols: ["file1"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 ```
@@ -104,6 +110,8 @@ right("file1", "read");
 symbols: ["0"]
 
 public keys: []
+
+block version: 3
 
 ```
 check if resource($0), operation("read"), right($0, "read");
@@ -124,6 +132,8 @@ symbols: ["file1", "file2"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 right("file2", "read");
@@ -134,6 +144,8 @@ right("file1", "write");
 symbols: ["0"]
 
 public keys: []
+
+block version: 3
 
 ```
 check if resource($0), operation("read"), right($0, "read");
@@ -154,6 +166,8 @@ symbols: ["file1", "file2"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 right("file2", "read");
@@ -164,6 +178,8 @@ right("file1", "write");
 symbols: ["0"]
 
 public keys: []
+
+block version: 3
 
 ```
 check if resource($0), operation("read"), right($0, "read");
@@ -184,6 +200,8 @@ symbols: ["file1", "file2"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 right("file2", "read");
@@ -194,6 +212,8 @@ right("file1", "write");
 symbols: ["0"]
 
 public keys: []
+
+block version: 3
 
 ```
 check if resource($0), operation("read"), right($0, "read");
@@ -214,6 +234,8 @@ symbols: ["file1", "file2"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 right("file2", "read");
@@ -225,6 +247,8 @@ symbols: ["0"]
 
 public keys: []
 
+block version: 3
+
 ```
 check if resource($0), operation("read"), right($0, "read");
 ```
@@ -233,6 +257,8 @@ check if resource($0), operation("read"), right($0, "read");
 symbols: []
 
 public keys: []
+
+block version: 3
 
 ```
 check if resource("file1");
@@ -253,6 +279,8 @@ symbols: ["user_id", "alice", "file1"]
 
 public keys: []
 
+block version: 3
+
 ```
 user_id("alice");
 owner("alice", "file1");
@@ -263,6 +291,8 @@ symbols: ["0", "1"]
 
 public keys: []
 
+block version: 3
+
 ```
 right($0, "read") <- resource($0), user_id($1), owner($1, $0);
 check if resource($0), operation("read"), right($0, "read");
@@ -272,6 +302,8 @@ check if resource($0), operation("read"), right($0, "read");
 symbols: ["file2"]
 
 public keys: []
+
+block version: 3
 
 ```
 owner("alice", "file2");
@@ -366,6 +398,8 @@ symbols: ["file1"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 ```
@@ -375,6 +409,8 @@ symbols: ["0"]
 
 public keys: []
 
+block version: 3
+
 ```
 check if resource($0), operation("read"), right($0, "read");
 ```
@@ -383,6 +419,8 @@ check if resource($0), operation("read"), right($0, "read");
 symbols: ["file2"]
 
 public keys: []
+
+block version: 3
 
 ```
 right("file2", "read");
@@ -467,6 +505,8 @@ symbols: []
 
 public keys: []
 
+block version: 3
+
 ```
 ```
 
@@ -474,6 +514,8 @@ public keys: []
 symbols: ["file1"]
 
 public keys: []
+
+block version: 3
 
 ```
 check if resource("file1");
@@ -541,6 +583,8 @@ symbols: ["file1"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 ```
@@ -549,6 +593,8 @@ right("file1", "read");
 symbols: ["file2"]
 
 public keys: []
+
+block version: 3
 
 ```
 right("file2", "read");
@@ -634,6 +680,8 @@ symbols: ["file1"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 ```
@@ -706,6 +754,8 @@ authority:
 symbols: ["file1"]
 
 public keys: []
+
+block version: 3
 
 ```
 check if resource("file1");
@@ -813,6 +863,8 @@ symbols: ["file1", "file2"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 right("file2", "read");
@@ -822,6 +874,8 @@ right("file2", "read");
 symbols: ["valid_date", "0", "1"]
 
 public keys: []
+
+block version: 3
 
 ```
 valid_date("file1") <- time($0), resource("file1"), $0 <= 2030-12-31T12:59:59Z;
@@ -986,6 +1040,8 @@ symbols: ["0", "file[0-9]+.txt"]
 
 public keys: []
 
+block version: 3
+
 ```
 check if resource($0), $0.matches("file[0-9]+.txt");
 ```
@@ -1088,6 +1144,8 @@ symbols: ["must_be_present", "hello"]
 
 public keys: []
 
+block version: 3
+
 ```
 must_be_present("hello");
 ```
@@ -1149,6 +1207,8 @@ symbols: ["hello"]
 
 public keys: []
 
+block version: 3
+
 ```
 check if resource("hello");
 ```
@@ -1157,6 +1217,8 @@ check if resource("hello");
 symbols: ["test"]
 
 public keys: []
+
+block version: 3
 
 ```
 query("test");
@@ -1217,6 +1279,8 @@ authority:
 symbols: ["hello world", "hello", "world", "aaabde", "a*c?.e", "abd", "aaa", "b", "de", "abcD12", "é", "abc", "def"]
 
 public keys: []
+
+block version: 3
 
 ```
 check if true;
@@ -1340,6 +1404,8 @@ symbols: []
 
 public keys: []
 
+block version: 3
+
 ```
 check if operation("read");
 ```
@@ -1348,6 +1414,8 @@ check if operation("read");
 symbols: ["unbound", "any1", "any2"]
 
 public keys: []
+
+block version: 3
 
 ```
 operation($unbound, "read") <- operation($any1, $any2);
@@ -1368,6 +1436,8 @@ symbols: []
 
 public keys: []
 
+block version: 3
+
 ```
 check if operation("read");
 ```
@@ -1376,6 +1446,8 @@ check if operation("read");
 symbols: ["any"]
 
 public keys: []
+
+block version: 3
 
 ```
 operation("read") <- operation($any);
@@ -1457,6 +1529,8 @@ symbols: ["file1", "file2"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 right("file2", "read");
@@ -1467,6 +1541,8 @@ right("file1", "write");
 symbols: ["0"]
 
 public keys: []
+
+block version: 3
 
 ```
 check if resource($0), operation("read"), right($0, "read");
@@ -1542,6 +1618,8 @@ symbols: ["ns::fact_123", "hello é\t😁"]
 
 public keys: []
 
+block version: 3
+
 ```
 ns::fact_123("hello é	😁");
 ```
@@ -1602,6 +1680,8 @@ authority:
 symbols: []
 
 public keys: []
+
+block version: 3
 
 ```
 read(0);
@@ -1718,6 +1798,8 @@ symbols: ["authority_fact"]
 
 public keys: []
 
+block version: 3
+
 ```
 authority_fact(1);
 ```
@@ -1727,6 +1809,8 @@ symbols: ["block1_fact"]
 
 public keys: []
 
+block version: 3
+
 ```
 block1_fact(1);
 ```
@@ -1735,6 +1819,8 @@ block1_fact(1);
 symbols: ["var"]
 
 public keys: []
+
+block version: 3
 
 ```
 check if authority_fact($var);
@@ -1809,6 +1895,8 @@ symbols: []
 
 public keys: ["ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5152947abc149bc20189"]
 
+block version: 4
+
 ```
 right("read");
 check if group("admin") trusting ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5152947abc149bc20189;
@@ -1820,6 +1908,8 @@ symbols: []
 public keys: []
 
 external signature by: "ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5152947abc149bc20189"
+
+block version: 5
 
 ```
 group("admin");
@@ -1899,6 +1989,8 @@ authority:
 symbols: ["allowed_operations", "A", "B", "op", "allowed"]
 
 public keys: []
+
+block version: 4
 
 ```
 allowed_operations({"A", "B"});
@@ -2027,6 +2119,8 @@ symbols: []
 
 public keys: ["ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5152947abc149bc20189"]
 
+block version: 4
+
 ```
 query(0);
 check if true trusting previous, ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5152947abc149bc20189;
@@ -2038,6 +2132,8 @@ symbols: []
 public keys: ["ed25519/a060270db7e9c9f06e8f9cc33a64e99f6596af12cb01c4b638df8afc7b642463", "ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5152947abc149bc20189"]
 
 external signature by: "ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5152947abc149bc20189"
+
+block version: 5
 
 ```
 query(1);
@@ -2053,6 +2149,8 @@ public keys: ["ed25519/a060270db7e9c9f06e8f9cc33a64e99f6596af12cb01c4b638df8afc7
 
 external signature by: "ed25519/a060270db7e9c9f06e8f9cc33a64e99f6596af12cb01c4b638df8afc7b642463"
 
+block version: 5
+
 ```
 query(2);
 check if query(2), query(3) trusting ed25519/a060270db7e9c9f06e8f9cc33a64e99f6596af12cb01c4b638df8afc7b642463;
@@ -2066,6 +2164,8 @@ public keys: ["ed25519/a060270db7e9c9f06e8f9cc33a64e99f6596af12cb01c4b638df8afc7
 
 external signature by: "ed25519/a060270db7e9c9f06e8f9cc33a64e99f6596af12cb01c4b638df8afc7b642463"
 
+block version: 5
+
 ```
 query(3);
 check if query(2), query(3) trusting ed25519/a060270db7e9c9f06e8f9cc33a64e99f6596af12cb01c4b638df8afc7b642463;
@@ -2076,6 +2176,8 @@ check if query(1) trusting ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5
 symbols: []
 
 public keys: ["ed25519/a060270db7e9c9f06e8f9cc33a64e99f6596af12cb01c4b638df8afc7b642463", "ed25519/f98da8c1cf907856431bfc3dc87531e0eaadba90f919edc232405b85877ef136"]
+
+block version: 4
 
 ```
 query(4);
@@ -2100,7 +2202,7 @@ revocation ids:
 - `7113d4dbb3b688b80e941f365a2c6342d480c77ed03937bccf85dc5cc3554c7517887b1b0c9021388a71e6ca9047aabaaad5ae5b511a2880902568444a98e50b`
 - `d0e3fc4bbd1b7320022800af909585aa906f677c4ca79c275a10b6779f669384c464ee84a1b04f13877a25761a874748362c065f4d15a8cab5c5e16c34074403`
 - `29b7e0a1f118a6185814a552660c516c43482044e280e7a8de85b8e7e54947e0ae82eb39d7b524d4b72cb9812a7a4b8871964f8f825b1c1ed85d344c05281d0d`
-- `3f675d6c364e06405d4868c904e40f3d81c32b083d91586db814d4cb4bf536b4ba209d82f11b4cb6da293b60b20d6122fc3e0e08e80c381dee83edd848211900`
+- `c0a505d4d921a8b2d0b885917d42e2bca87b5302d13249a61af6f3802af44d691c40a624f901d677724740cb974a188aeb1c3992c1565ac0fbec3aa4f68dac0a`
 
 authorizer world:
 ```
@@ -2256,10 +2358,12 @@ symbols: []
 
 public keys: []
 
+block version: 4
+
 ```
-check if 10000000000 * 10000000000 != 0;
-check if 9223372036854775807 + 1 != 0;
-check if -9223372036854775808 - 1 != 0;
+check if 10000000000 * 10000000000 !== 0;
+check if 9223372036854775807 + 1 !== 0;
+check if -9223372036854775808 - 1 !== 0;
 ```
 
 ### validation
@@ -2270,7 +2374,7 @@ allow if true;
 ```
 
 revocation ids:
-- `31f01031b8d9cc312c346674625a2218b19a126e931318dc02d8d53aec2775faecd3f848f60c1446573c37ea0664fefc768f35ba5ce4365b83ff06f0c0409b0e`
+- `fb5e7ac2bb892f5cf2fb59677cfad1f96deabbc8e158e3fd1b5ee7c4b6949c999e2169187cbee53b943eebdadaaf68832747baa8cffa2ff9f78025a1f55f440c`
 
 authorizer world:
 ```
@@ -2283,9 +2387,9 @@ World {
             0,
         ),
         checks: [
-            "check if -9223372036854775808 - 1 != 0",
-            "check if 10000000000 * 10000000000 != 0",
-            "check if 9223372036854775807 + 1 != 0",
+            "check if -9223372036854775808 - 1 !== 0",
+            "check if 10000000000 * 10000000000 !== 0",
+            "check if 9223372036854775807 + 1 !== 0",
         ],
     },
 ]
@@ -2307,6 +2411,8 @@ authority:
 symbols: ["abcD12x", "abcD12"]
 
 public keys: []
+
+block version: 4
 
 ```
 check if 1 !== 3;
@@ -2366,6 +2472,8 @@ symbols: ["test"]
 
 public keys: []
 
+block version: 6
+
 ```
 reject if test($test), $test;
 ```
@@ -2380,7 +2488,7 @@ allow if true;
 ```
 
 revocation ids:
-- `2e6dcafe4061dd86f61ad038a0a1bea816b85898bb86a14b16177e78ee249fcfb2455e2eed52ccfe8eafc679b1f34f9ef98e92e3719981dd4098b901b6cb040b`
+- `8d175329f7cf161f3cb5badc52f0e22e520956cdb565edbed963e9b047b20a314a7de1c9eba6b7bbf622636516ab3cc7f91572ae9461d3152825e0ece5127a0a`
 
 authorizer world:
 ```
@@ -2423,7 +2531,7 @@ allow if true;
 ```
 
 revocation ids:
-- `2e6dcafe4061dd86f61ad038a0a1bea816b85898bb86a14b16177e78ee249fcfb2455e2eed52ccfe8eafc679b1f34f9ef98e92e3719981dd4098b901b6cb040b`
+- `8d175329f7cf161f3cb5badc52f0e22e520956cdb565edbed963e9b047b20a314a7de1c9eba6b7bbf622636516ab3cc7f91572ae9461d3152825e0ece5127a0a`
 
 authorizer world:
 ```
@@ -2468,6 +2576,8 @@ symbols: ["fact", "value"]
 
 public keys: []
 
+block version: 6
+
 ```
 check if fact(null, $value), $value == null;
 reject if fact(null, $value), $value != null;
@@ -2483,7 +2593,7 @@ allow if true;
 ```
 
 revocation ids:
-- `c6c60ff84938908ca2bfcc7d674a400857c3349bdb373646c825e946ad0d08d76fd4734cd40f09884db0a41aee0c078897750e27706959d785750ef24acf100f`
+- `fe50d65706a5945c76569d1ff2be8ece24276857631e96efa05959f73bb4ea8c772945738a01da77a1661aef2b8233b4f4e49ae220f2c81fd0b8da59c212750b`
 
 authorizer world:
 ```
@@ -2527,7 +2637,7 @@ allow if true;
 ```
 
 revocation ids:
-- `c6c60ff84938908ca2bfcc7d674a400857c3349bdb373646c825e946ad0d08d76fd4734cd40f09884db0a41aee0c078897750e27706959d785750ef24acf100f`
+- `fe50d65706a5945c76569d1ff2be8ece24276857631e96efa05959f73bb4ea8c772945738a01da77a1661aef2b8233b4f4e49ae220f2c81fd0b8da59c212750b`
 
 authorizer world:
 ```
@@ -2571,7 +2681,7 @@ allow if true;
 ```
 
 revocation ids:
-- `c6c60ff84938908ca2bfcc7d674a400857c3349bdb373646c825e946ad0d08d76fd4734cd40f09884db0a41aee0c078897750e27706959d785750ef24acf100f`
+- `fe50d65706a5945c76569d1ff2be8ece24276857631e96efa05959f73bb4ea8c772945738a01da77a1661aef2b8233b4f4e49ae220f2c81fd0b8da59c212750b`
 
 authorizer world:
 ```
@@ -2615,7 +2725,7 @@ allow if true;
 ```
 
 revocation ids:
-- `c6c60ff84938908ca2bfcc7d674a400857c3349bdb373646c825e946ad0d08d76fd4734cd40f09884db0a41aee0c078897750e27706959d785750ef24acf100f`
+- `fe50d65706a5945c76569d1ff2be8ece24276857631e96efa05959f73bb4ea8c772945738a01da77a1661aef2b8233b4f4e49ae220f2c81fd0b8da59c212750b`
 
 authorizer world:
 ```
@@ -2661,6 +2771,8 @@ symbols: ["abcD12", "abcD12x", "fact", "value", "fact2"]
 
 public keys: []
 
+block version: 6
+
 ```
 check if true == true;
 check if false == false;
@@ -2696,7 +2808,7 @@ allow if true;
 ```
 
 revocation ids:
-- `899521bb50786bd40a21bf22c9362b021a9300e20cbf1b8b2f70bd1f5a9b01c420efeab85092f081db71ce7b7cebfc01b4a4f8f2294c478ce4c7f8813ffa5c0f`
+- `be50b2040f4b5fe278b87815910d249eeb9ca5238cae4ea538e22afda11f576e868cbfe7e6b0a03b02ae0f22239ec908947d4bad5a878e4b9f7bd7de73e5c90a`
 
 authorizer world:
 ```
@@ -2763,7 +2875,7 @@ allow if true;
 ```
 
 revocation ids:
-- `899521bb50786bd40a21bf22c9362b021a9300e20cbf1b8b2f70bd1f5a9b01c420efeab85092f081db71ce7b7cebfc01b4a4f8f2294c478ce4c7f8813ffa5c0f`
+- `be50b2040f4b5fe278b87815910d249eeb9ca5238cae4ea538e22afda11f576e868cbfe7e6b0a03b02ae0f22239ec908947d4bad5a878e4b9f7bd7de73e5c90a`
 
 authorizer world:
 ```
@@ -2837,6 +2949,8 @@ symbols: ["x", "p", "q"]
 
 public keys: []
 
+block version: 6
+
 ```
 check if !false && true;
 check if false || true;
@@ -2858,7 +2972,7 @@ allow if true;
 ```
 
 revocation ids:
-- `ef75002a071b56293152a4c9eb69ba0793614993e667736a6a92275ddd5aa35a287de5b13acaec72b5af6ba2ee8a3629b1a33cfa51597ae5afbebd8aa35dbe08`
+- `2cd348b6df5f08b900903fd8d3fbea0bb89b665c331a2aa2131e0b8ecb38b3550275d4ccd8db35da6c4433eed1d456cfb761e3fcc7845894d891e986ca044b02`
 
 authorizer world:
 ```
@@ -2899,7 +3013,7 @@ allow if [true].any($p -> [true].all($p -> $p));
 ```
 
 revocation ids:
-- `ef75002a071b56293152a4c9eb69ba0793614993e667736a6a92275ddd5aa35a287de5b13acaec72b5af6ba2ee8a3629b1a33cfa51597ae5afbebd8aa35dbe08`
+- `2cd348b6df5f08b900903fd8d3fbea0bb89b665c331a2aa2131e0b8ecb38b3550275d4ccd8db35da6c4433eed1d456cfb761e3fcc7845894d891e986ca044b02`
 
 authorizer world:
 ```
@@ -2944,6 +3058,8 @@ symbols: ["integer", "string", "test", "date", "bytes", "bool", "set", "null", "
 
 public keys: []
 
+block version: 6
+
 ```
 integer(1);
 string("test");
@@ -2980,7 +3096,7 @@ allow if true;
 ```
 
 revocation ids:
-- `c8f7ff152b40a3e8f3ab19a435ccd16c41288762864022895b99d2abb6330c794b3f1378a4651b31d249f4c35b69246d88124d40e05e634a0eb9ca9e54b1ca0a`
+- `e60875c6ef7917c227a5e4b2cabfe250a85fa0598eb3cf7987ded0da2b69a559a1665bd312aeecde78e76aeb28ea1c1a03ec9b7dec8aeb519e7867ef8ff9b402`
 
 authorizer world:
 ```
@@ -3050,6 +3166,8 @@ symbols: ["a", "b", "c", "p", "d", "A", "kv", "id", "roles"]
 
 public keys: []
 
+block version: 6
+
 ```
 check if [1, 2, 1].length() == 3;
 check if ["a", "b"] != true;
@@ -3088,7 +3206,7 @@ allow if true;
 ```
 
 revocation ids:
-- `8041144f92616477f1cd00b81e8be79581202a3853b08b3d477797b0d91f30c02fd7c01ca91a00f8a222d6be4794cc287baa361a1a00d5941518c1917967ec03`
+- `b22238a06ca9c015d3c49d4ebaa7e8ab6e0d69119b3264033618e726d62fc6f4757a7bebc25f255444aba39994554a62a53ecc13b68802efab8da85ace62390d`
 
 authorizer world:
 ```
@@ -3150,6 +3268,8 @@ symbols: ["test", "a", "equal strings"]
 
 public keys: []
 
+block version: 6
+
 ```
 check if true.extern::test(), "a".extern::test("a") == "equal strings";
 ```
@@ -3162,7 +3282,7 @@ allow if true;
 ```
 
 revocation ids:
-- `faf26fe6f5dfa08c114a0a29321405b6fb7be79b0d80694d27925f7deb01effe5707600e42fd74f9a1d2920466446d51949155f4548f0fd68f3e9326c7e12404`
+- `d1719fd101c2695d2dac4df67569918363f691b6167670e1dbbf8026f639a7aa1ec2e13707f4d34cadbb2adce5c6e8a816577dd069a8717e0f5cb4ea3cec5b04`
 
 authorizer world:
 ```
@@ -3198,6 +3318,8 @@ symbols: ["file1", "file2"]
 
 public keys: []
 
+block version: 3
+
 ```
 right("file1", "read");
 right("file2", "read");
@@ -3208,6 +3330,8 @@ right("file1", "write");
 symbols: ["0"]
 
 public keys: []
+
+block version: 3
 
 ```
 check if resource($0), operation("read"), right($0, "read");
@@ -3224,8 +3348,8 @@ allow if true;
 ```
 
 revocation ids:
-- `760785de30d7348e9c847aab8b3bdad6a0d463f4f50ed9667aade563e9112ee6d2f589630dd7553c2eced2a57edf3636d5c874b35df15120c62fddcbdbd2de09`
-- `30440220039667c7a4d964e4b449289dc8fd206d7aa0e77eb701a9253b3307d32c177fa8022023f7523c143c5fb55ee4cafe49804702ef05a70883ebf42185b54bd36a7e7cd4`
+- `628b9a6d74cc80b3ece50befd1f5f0f025c0a35d51708b2e77c11aed5f968b93b4096c87ed8169605716de934e155443f140334d71708fcc4247e5a0a518b30d`
+- `3046022100b60674854a12814cc36c8aab9600c1d9f9d3160e2334b72c0feede5a56213ea5022100a4f4bbf2dc33b309267af39fce76612017ddb6171e9cd2a3aa8a853f45f1675f`
 
 authorizer world:
 ```

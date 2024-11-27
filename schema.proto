@@ -33,7 +33,6 @@ message PublicKey {
   required bytes key = 2;
 }
 
-
 message Proof {
   oneof Content {
     bytes nextSecret = 1;

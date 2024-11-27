@@ -2,7 +2,7 @@
 
 [Join the Matrix chat](https://matrix.to/#/#biscuit-auth:matrix.org)
 
-<img src="https://raw.githubusercontent.com/biscuit-auth/biscuit/master/assets/brown.png" width="200">
+<img src="https://raw.githubusercontent.com/biscuit-auth/biscuit/main/assets/logo-black-white-bg.png" width="200">
 
 <https://www.biscuitsec.org>
 
@@ -33,9 +33,29 @@ Current status:
 - we have implementations for biscuits v1 in
   - [Java](https://github.com/clevercloud/biscuit-java) (migration to v2 is in progress)
   - [Go](https://github.com/biscuit-auth/biscuit-go)
+  - [.Net](https://github.com/dmunch/biscuit-net)
 - a website with documentation and an interactive playground is live at <https://biscuitsec.org>
 - Currently deploying to real world use cases such as [Apache Pulsar](https://github.com/clevercloud/biscuit-pulsar) at [Clever Cloud](https://www.clever-cloud.com/)
 - looking for an audit of the token's design, cryptographic primitives and implementations
+
+## Feature support
+
+The different implementations are following the specification closely, but parts of it may take some time to be fully implemented, so here is the current list of supported features per version:
+
+* ✅ full support
+* 🚧 partial support
+* ❌ not supported yet
+
+|                    | Rust | Haskell | Java | Go | Python | C# |
+|--------------------|------|---------|------|----|--------|----|
+|**v2**              |  ✅  |    ✅   |  ✅  | ✅ |   ✅   | ✅ |
+|**v3**              |  ✅  |    ✅   |  🚧  | ❌ |   ✅   | ✅ |
+| scopes             |  ✅  |    ✅   |  ✅  | ❌ |   ✅   | ✅ |
+| check all          |  ✅  |    ✅   |  ✅  | ❌ |   ✅   | ✅ |
+| bitwise operations |  ✅  |    ✅   |  ✅  | ❌ |   ✅   | ✅ |
+| third party blocks |  ✅  |    ✅   |  🚧  | ❌ |   🚧   | ✅ |
+| snapshots          |  ✅  |    ❌   |  🚧  | ❌ |   ✅   | ❌ |
+
 
 ## How to help us?
 
@@ -54,7 +74,7 @@ Current status:
 
 Licensed under Apache License, Version 2.0, ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
 
-logo by [Mathias Adam](http://www.madgraphism.com/)
+logo by Julien Richard
 
 originally created at [Clever Cloud](https://www.clever-cloud.com/)
 
