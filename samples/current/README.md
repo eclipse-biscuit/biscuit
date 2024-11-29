@@ -1321,6 +1321,7 @@ check if {1, 2}.intersection({2, 3}) === {2};
 check if {1, 2}.union({2, 3}) === {1, 2, 3};
 check if {1, 2, 3}.intersection({1, 2}).contains(1);
 check if {1, 2, 3}.intersection({1, 2}).length() === 2;
+check if {,}.length() === 0;
 ```
 
 ### validation
@@ -1331,7 +1332,7 @@ allow if true;
 ```
 
 revocation ids:
-- `d0420227266e3583a42dfaa0e38550d99f681d150dd18856f3af9a697bc9c5c8bf06b4b0fe5b9df0377d1b963574e2fd210a0a76a8b0756a65f640c602bebd07`
+- `fa358e4e3bea896415b1859e6cd347e64e1918fb86e31ae3fe208628321576a47f7a269760357e291c827ec9cbe322074f6860a546207a64e133c83a214bb505`
 
 authorizer world:
 ```
@@ -1372,6 +1373,7 @@ World {
             "check if true",
             "check if true === true",
             "check if {\"abc\", \"def\"}.contains(\"abc\")",
+            "check if {,}.length() === 0",
             "check if {1, 2, 3}.intersection({1, 2}).contains(1)",
             "check if {1, 2, 3}.intersection({1, 2}).length() === 2",
             "check if {1, 2} === {1, 2}",

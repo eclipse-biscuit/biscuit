@@ -1276,7 +1276,7 @@
           ],
           "public_keys": [],
           "external_key": null,
-          "code": "check if true;\ncheck if !false;\ncheck if true === true;\ncheck if false === false;\ncheck if 1 < 2;\ncheck if 2 > 1;\ncheck if 1 <= 2;\ncheck if 1 <= 1;\ncheck if 2 >= 1;\ncheck if 2 >= 2;\ncheck if 3 === 3;\ncheck if 1 + 2 * 3 - 4 / 2 === 5;\ncheck if \"hello world\".starts_with(\"hello\"), \"hello world\".ends_with(\"world\");\ncheck if \"aaabde\".matches(\"a*c?.e\");\ncheck if \"aaabde\".contains(\"abd\");\ncheck if \"aaabde\" === \"aaa\" + \"b\" + \"de\";\ncheck if \"abcD12\" === \"abcD12\";\ncheck if \"abcD12\".length() === 6;\ncheck if \"é\".length() === 2;\ncheck if 2019-12-04T09:46:41Z < 2020-12-04T09:46:41Z;\ncheck if 2020-12-04T09:46:41Z > 2019-12-04T09:46:41Z;\ncheck if 2019-12-04T09:46:41Z <= 2020-12-04T09:46:41Z;\ncheck if 2020-12-04T09:46:41Z >= 2020-12-04T09:46:41Z;\ncheck if 2020-12-04T09:46:41Z >= 2019-12-04T09:46:41Z;\ncheck if 2020-12-04T09:46:41Z >= 2020-12-04T09:46:41Z;\ncheck if 2020-12-04T09:46:41Z === 2020-12-04T09:46:41Z;\ncheck if hex:12ab === hex:12ab;\ncheck if {1, 2}.contains(2);\ncheck if {2019-12-04T09:46:41Z, 2020-12-04T09:46:41Z}.contains(2020-12-04T09:46:41Z);\ncheck if {false, true}.contains(true);\ncheck if {\"abc\", \"def\"}.contains(\"abc\");\ncheck if {hex:12ab, hex:34de}.contains(hex:34de);\ncheck if {1, 2}.contains({2});\ncheck if {1, 2} === {1, 2};\ncheck if {1, 2}.intersection({2, 3}) === {2};\ncheck if {1, 2}.union({2, 3}) === {1, 2, 3};\ncheck if {1, 2, 3}.intersection({1, 2}).contains(1);\ncheck if {1, 2, 3}.intersection({1, 2}).length() === 2;\n",
+          "code": "check if true;\ncheck if !false;\ncheck if true === true;\ncheck if false === false;\ncheck if 1 < 2;\ncheck if 2 > 1;\ncheck if 1 <= 2;\ncheck if 1 <= 1;\ncheck if 2 >= 1;\ncheck if 2 >= 2;\ncheck if 3 === 3;\ncheck if 1 + 2 * 3 - 4 / 2 === 5;\ncheck if \"hello world\".starts_with(\"hello\"), \"hello world\".ends_with(\"world\");\ncheck if \"aaabde\".matches(\"a*c?.e\");\ncheck if \"aaabde\".contains(\"abd\");\ncheck if \"aaabde\" === \"aaa\" + \"b\" + \"de\";\ncheck if \"abcD12\" === \"abcD12\";\ncheck if \"abcD12\".length() === 6;\ncheck if \"é\".length() === 2;\ncheck if 2019-12-04T09:46:41Z < 2020-12-04T09:46:41Z;\ncheck if 2020-12-04T09:46:41Z > 2019-12-04T09:46:41Z;\ncheck if 2019-12-04T09:46:41Z <= 2020-12-04T09:46:41Z;\ncheck if 2020-12-04T09:46:41Z >= 2020-12-04T09:46:41Z;\ncheck if 2020-12-04T09:46:41Z >= 2019-12-04T09:46:41Z;\ncheck if 2020-12-04T09:46:41Z >= 2020-12-04T09:46:41Z;\ncheck if 2020-12-04T09:46:41Z === 2020-12-04T09:46:41Z;\ncheck if hex:12ab === hex:12ab;\ncheck if {1, 2}.contains(2);\ncheck if {2019-12-04T09:46:41Z, 2020-12-04T09:46:41Z}.contains(2020-12-04T09:46:41Z);\ncheck if {false, true}.contains(true);\ncheck if {\"abc\", \"def\"}.contains(\"abc\");\ncheck if {hex:12ab, hex:34de}.contains(hex:34de);\ncheck if {1, 2}.contains({2});\ncheck if {1, 2} === {1, 2};\ncheck if {1, 2}.intersection({2, 3}) === {2};\ncheck if {1, 2}.union({2, 3}) === {1, 2, 3};\ncheck if {1, 2, 3}.intersection({1, 2}).contains(1);\ncheck if {1, 2, 3}.intersection({1, 2}).length() === 2;\ncheck if {,}.length() === 0;\n",
           "version": 3
         }
       ],
@@ -1317,6 +1317,7 @@
                   "check if true",
                   "check if true === true",
                   "check if {\"abc\", \"def\"}.contains(\"abc\")",
+                  "check if {,}.length() === 0",
                   "check if {1, 2, 3}.intersection({1, 2}).contains(1)",
                   "check if {1, 2, 3}.intersection({1, 2}).length() === 2",
                   "check if {1, 2} === {1, 2}",
@@ -1339,7 +1340,7 @@
           },
           "authorizer_code": "allow if true;\n",
           "revocation_ids": [
-            "d0420227266e3583a42dfaa0e38550d99f681d150dd18856f3af9a697bc9c5c8bf06b4b0fe5b9df0377d1b963574e2fd210a0a76a8b0756a65f640c602bebd07"
+            "fa358e4e3bea896415b1859e6cd347e64e1918fb86e31ae3fe208628321576a47f7a269760357e291c827ec9cbe322074f6860a546207a64e133c83a214bb505"
           ]
         }
       }

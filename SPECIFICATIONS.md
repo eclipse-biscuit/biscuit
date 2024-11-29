@@ -121,9 +121,9 @@ We will represent the various types as follows:
 - date in RFC 3339 format: `1985-04-12T23:20:50.52Z`
 - boolean: `true` or `false`
 - null: `null`, supported since v3.3
-- set: `{ "a", "b", "c"}`
+- set: `{"a", "b", "c"}` (the empty set is `{,}`)
 - array: `[ "a", true, null]`, supported since v3.3
-- map: `{ "a": true, 12: "a" }`, supported since v3.3
+- map: `{ "a": true, 12: "a" }` (the empty map is `{}`), supported since v3.3
 
 As an example, assuming we have the following facts: `parent("a", "b")`,
 `parent("b", "c")`, `parent("c", "d")`. If we apply the rule
@@ -205,7 +205,7 @@ The logic language is described by the following EBNF grammar:
 <boolean> ::= "true" | "false"
 <null> ::= "null"
 <date> ::= [0-9]* "-" [0-9] [0-9] "-" [0-9] [0-9] "T" [0-9] [0-9] ":" [0-9] [0-9] ":" [0-9] [0-9] ( "Z" | ( ("+" | "-") [0-9] [0-9] ":" [0-9] [0-9] ))
-<set> ::= "{" <sp>? ( <set_term> ( <sp>? "," <sp>? <set_term>)* <sp>? )? "}"
+<set> ::= "{"  "," | (<sp>? ( <set_term> ( <sp>? "," <sp>? <set_term>)* <sp>? ) )"}"
 <array> ::= "[" <sp>? ( <term> ( <sp>? "," <sp>? <term>)* <sp>? )? "]"
 <map_entry> ::= (<string> | <number>) <sp>? ":" <sp>? <term>
 <map> ::= "{" <sp>? ( <map_entry> ( <sp>? "," <sp>? <map_entry>)* <sp>? )? "}"
