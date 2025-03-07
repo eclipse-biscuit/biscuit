@@ -186,6 +186,7 @@ message OpBinary {
     Any = 26;
     Get = 27;
     Ffi = 28;
+    Try = 29;
   }
 
   required Kind kind = 1;
