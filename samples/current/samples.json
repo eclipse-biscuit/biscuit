@@ -3088,6 +3088,171 @@
           ]
         }
       }
+    },
+    {
+      "title": "ECDSA secp256r1 signature on third-party block",
+      "filename": "test037_secp256r1_third_party.bc",
+      "token": [
+        {
+          "symbols": [
+            "file1",
+            "file2",
+            "from_third"
+          ],
+          "public_keys": [
+            "secp256r1/025e918fd4463832aea2823dfd9716a36b4d9b1377bd53dd82ddf4c0bc75ed6bbf"
+          ],
+          "external_key": null,
+          "code": "right(\"file1\", \"read\");\nright(\"file2\", \"read\");\nright(\"file1\", \"write\");\ncheck if from_third(true) trusting secp256r1/025e918fd4463832aea2823dfd9716a36b4d9b1377bd53dd82ddf4c0bc75ed6bbf;\n",
+          "version": 4
+        },
+        {
+          "symbols": [
+            "from_third",
+            "0"
+          ],
+          "public_keys": [],
+          "external_key": "secp256r1/025e918fd4463832aea2823dfd9716a36b4d9b1377bd53dd82ddf4c0bc75ed6bbf",
+          "code": "from_third(true);\ncheck if resource($0), operation(\"read\"), right($0, \"read\");\n",
+          "version": 5
+        }
+      ],
+      "validations": {
+        "": {
+          "world": {
+            "facts": [
+              {
+                "origin": [
+                  null
+                ],
+                "facts": [
+                  "operation(\"read\")",
+                  "resource(\"file1\")"
+                ]
+              },
+              {
+                "origin": [
+                  0
+                ],
+                "facts": [
+                  "right(\"file1\", \"read\")",
+                  "right(\"file1\", \"write\")",
+                  "right(\"file2\", \"read\")"
+                ]
+              },
+              {
+                "origin": [
+                  1
+                ],
+                "facts": [
+                  "from_third(true)"
+                ]
+              }
+            ],
+            "rules": [],
+            "checks": [
+              {
+                "origin": 0,
+                "checks": [
+                  "check if from_third(true) trusting secp256r1/025e918fd4463832aea2823dfd9716a36b4d9b1377bd53dd82ddf4c0bc75ed6bbf"
+                ]
+              },
+              {
+                "origin": 1,
+                "checks": [
+                  "check if resource($0), operation(\"read\"), right($0, \"read\")"
+                ]
+              }
+            ],
+            "policies": [
+              "allow if true"
+            ]
+          },
+          "result": {
+            "Ok": 0
+          },
+          "authorizer_code": "resource(\"file1\");\noperation(\"read\");\n\nallow if true;\n",
+          "revocation_ids": [
+            "70f5402208516fd44cfc9df3dfcfc0a327ee9004f1801ed0a7abdcbbae923d566ddcd2d4a14f4622b35732c4e538af04075cc67ab0888fa2d8923cc668187f0f",
+            "30450220793f95665d9af646339503a073670ea2c352459d2a2c2e14c57565f6c7eaf6bc022100cccadfc37e46755f52bb054ed206d7335067885df599a69431db40e33f33d4cf"
+          ]
+        }
+      }
+    },
+    {
+      "title": "test try operation",
+      "filename": "test038_try_op.bc",
+      "token": [
+        {
+          "symbols": [],
+          "public_keys": [],
+          "external_key": null,
+          "code": "check if (true === 12).try_or(true);\ncheck if ((true === 12).try_or(true === 12)).try_or(true);\nreject if (true == 12).try_or(true);\n",
+          "version": 6
+        }
+      ],
+      "validations": {
+        "": {
+          "world": {
+            "facts": [],
+            "rules": [],
+            "checks": [
+              {
+                "origin": 0,
+                "checks": [
+                  "check if ((true === 12).try_or(true === 12)).try_or(true)",
+                  "check if (true === 12).try_or(true)",
+                  "reject if (true == 12).try_or(true)"
+                ]
+              }
+            ],
+            "policies": [
+              "allow if true"
+            ]
+          },
+          "result": {
+            "Ok": 0
+          },
+          "authorizer_code": "allow if true;\n",
+          "revocation_ids": [
+            "79674155cd5349604e89b00792aeaebfa0a512bd45edc289305ebec107f627d3d8c09847646a0d06c2390a4354771b2ebdc2cc66971f2d74ef744e4e81197600"
+          ]
+        },
+        "right-hand side does not catch errors": {
+          "world": {
+            "facts": [],
+            "rules": [],
+            "checks": [
+              {
+                "origin": 0,
+                "checks": [
+                  "check if ((true === 12).try_or(true === 12)).try_or(true)",
+                  "check if (true === 12).try_or(true)",
+                  "reject if (true == 12).try_or(true)"
+                ]
+              },
+              {
+                "origin": 18446744073709551615,
+                "checks": [
+                  "check if true.try_or(true === 12)"
+                ]
+              }
+            ],
+            "policies": [
+              "allow if true"
+            ]
+          },
+          "result": {
+            "Err": {
+              "Execution": "InvalidType"
+            }
+          },
+          "authorizer_code": "check if true.try_or(true === 12);\n\nallow if true;\n",
+          "revocation_ids": [
+            "79674155cd5349604e89b00792aeaebfa0a512bd45edc289305ebec107f627d3d8c09847646a0d06c2390a4354771b2ebdc2cc66971f2d74ef744e4e81197600"
+          ]
+        }
+      }
     }
   ]
 }

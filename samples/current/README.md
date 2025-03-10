@@ -3398,3 +3398,212 @@ World {
 
 result: `Ok(0)`
 
+
+------------------------------
+
+## ECDSA secp256r1 signature on third-party block: test037_secp256r1_third_party.bc
+### token
+
+authority:
+symbols: ["file1", "file2", "from_third"]
+
+public keys: ["secp256r1/025e918fd4463832aea2823dfd9716a36b4d9b1377bd53dd82ddf4c0bc75ed6bbf"]
+
+block version: 4
+
+```
+right("file1", "read");
+right("file2", "read");
+right("file1", "write");
+check if from_third(true) trusting secp256r1/025e918fd4463832aea2823dfd9716a36b4d9b1377bd53dd82ddf4c0bc75ed6bbf;
+```
+
+1:
+symbols: ["from_third", "0"]
+
+public keys: []
+
+external signature by: "secp256r1/025e918fd4463832aea2823dfd9716a36b4d9b1377bd53dd82ddf4c0bc75ed6bbf"
+
+block version: 5
+
+```
+from_third(true);
+check if resource($0), operation("read"), right($0, "read");
+```
+
+### validation
+
+authorizer code:
+```
+resource("file1");
+operation("read");
+
+allow if true;
+```
+
+revocation ids:
+- `70f5402208516fd44cfc9df3dfcfc0a327ee9004f1801ed0a7abdcbbae923d566ddcd2d4a14f4622b35732c4e538af04075cc67ab0888fa2d8923cc668187f0f`
+- `30450220793f95665d9af646339503a073670ea2c352459d2a2c2e14c57565f6c7eaf6bc022100cccadfc37e46755f52bb054ed206d7335067885df599a69431db40e33f33d4cf`
+
+authorizer world:
+```
+World {
+  facts: [
+    Facts {
+        origin: {
+            None,
+        },
+        facts: [
+            "operation(\"read\")",
+            "resource(\"file1\")",
+        ],
+    },
+    Facts {
+        origin: {
+            Some(
+                0,
+            ),
+        },
+        facts: [
+            "right(\"file1\", \"read\")",
+            "right(\"file1\", \"write\")",
+            "right(\"file2\", \"read\")",
+        ],
+    },
+    Facts {
+        origin: {
+            Some(
+                1,
+            ),
+        },
+        facts: [
+            "from_third(true)",
+        ],
+    },
+]
+  rules: []
+  checks: [
+    Checks {
+        origin: Some(
+            0,
+        ),
+        checks: [
+            "check if from_third(true) trusting secp256r1/025e918fd4463832aea2823dfd9716a36b4d9b1377bd53dd82ddf4c0bc75ed6bbf",
+        ],
+    },
+    Checks {
+        origin: Some(
+            1,
+        ),
+        checks: [
+            "check if resource($0), operation(\"read\"), right($0, \"read\")",
+        ],
+    },
+]
+  policies: [
+    "allow if true",
+]
+}
+```
+
+result: `Ok(0)`
+
+
+------------------------------
+
+## test try operation: test038_try_op.bc
+### token
+
+authority:
+symbols: []
+
+public keys: []
+
+block version: 6
+
+```
+check if (true === 12).try_or(true);
+check if ((true === 12).try_or(true === 12)).try_or(true);
+reject if (true == 12).try_or(true);
+```
+
+### validation
+
+authorizer code:
+```
+allow if true;
+```
+
+revocation ids:
+- `79674155cd5349604e89b00792aeaebfa0a512bd45edc289305ebec107f627d3d8c09847646a0d06c2390a4354771b2ebdc2cc66971f2d74ef744e4e81197600`
+
+authorizer world:
+```
+World {
+  facts: []
+  rules: []
+  checks: [
+    Checks {
+        origin: Some(
+            0,
+        ),
+        checks: [
+            "check if ((true === 12).try_or(true === 12)).try_or(true)",
+            "check if (true === 12).try_or(true)",
+            "reject if (true == 12).try_or(true)",
+        ],
+    },
+]
+  policies: [
+    "allow if true",
+]
+}
+```
+
+result: `Ok(0)`
+### validation for "right-hand side does not catch errors"
+
+authorizer code:
+```
+check if true.try_or(true === 12);
+
+allow if true;
+```
+
+revocation ids:
+- `79674155cd5349604e89b00792aeaebfa0a512bd45edc289305ebec107f627d3d8c09847646a0d06c2390a4354771b2ebdc2cc66971f2d74ef744e4e81197600`
+
+authorizer world:
+```
+World {
+  facts: []
+  rules: []
+  checks: [
+    Checks {
+        origin: Some(
+            0,
+        ),
+        checks: [
+            "check if ((true === 12).try_or(true === 12)).try_or(true)",
+            "check if (true === 12).try_or(true)",
+            "reject if (true == 12).try_or(true)",
+        ],
+    },
+    Checks {
+        origin: Some(
+            18446744073709551615,
+        ),
+        checks: [
+            "check if true.try_or(true === 12)",
+        ],
+    },
+]
+  policies: [
+    "allow if true",
+]
+}
+```
+
+result: `Err(Execution(InvalidType))`
+

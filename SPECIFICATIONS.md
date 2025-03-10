@@ -515,6 +515,7 @@ Here are the currently defined binary operations:
   on arrays, takes an integer and returns the corresponding element (or `null`, if out of bounds)  
   on maps, takes either an integer or a string and returns the corresponding element (or `null`, if out of bounds)
 - *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v3.3+)
+- _try_, takes a closure () -> any type and a value, returns the result of the closure if it evaluates without error, or returns the value if the closure evaluates to an error (v3.3+)
 
 Integer operations must have overflow checks. If it overflows, the expression
 fails.
