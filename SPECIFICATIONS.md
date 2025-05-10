@@ -684,8 +684,10 @@ Appending a new block to an existing biscuit token requires deserializing blocks
 
 The current version of the format is in [schema.proto](https://github.com/biscuit-auth/biscuit/blob/master/schema.proto)
 
-The token contains two levels of serialization. The main structure that will be
-transmitted over the wire is either the normal Biscuit wrapper:
+The token contains two levels of serialization, each with its own versioning scheme.
+
+### Signed blocks
+The main structure that will be transmitted over the wire is the Biscuit protobuf message:
 
 ```proto
 message Biscuit {
@@ -694,7 +696,30 @@ message Biscuit {
   repeated SignedBlock blocks = 3;
   required Proof proof = 4;
 }
+```
 
+The `rootKeyId` is a hint to decide which root public key should be used
+for signature verification.
+The `authority` block has a special meaning, as it is signed by the root key,
+so it is stored separately.
+The `blocks` field contains the rest of the block list, that must stay in the same order.
+The `proof` field contains either:
+- `nextSecret`: the private key corresponding to the `nextKey` public key in the last block (attenuable tokens)
+- `finalSignature`: a signature of the last block by that private key (sealed tokens).
+
+```proto
+message Proof {
+  oneof Content {
+    bytes nextSecret = 1;
+    bytes finalSignature = 2;
+  }
+}
+```
+
+The `SignedBlock` structure carries the sigend data and its signatures, representing the
+chain of trust starting from the root key.
+
+```proto
 message SignedBlock {
   required bytes block = 1;
   required PublicKey nextKey = 2;
@@ -702,12 +727,28 @@ message SignedBlock {
   optional ExternalSignature externalSignature = 4;
   optional uint32 version = 5;
 }
+```
 
+Each `SignedBlock` contains:
+- `block`: a `Block` structure serialized as a byte array
+- `nextKey`: the public key used to verify the next `SignedBlock`
+- `signature`: the signature of the current block
+- `externalSignature`: if present, it is a signature of the current block by another key
+- `version`: indicates the version of the signed payload format
+
+The version field is used to vary how the block is signed and verified.
+
+```proto
 message ExternalSignature {
   required bytes signature = 1;
   required PublicKey publicKey = 2;
 }
+```
 
+an `ExternalSignature` contains the `signature` of the signed block by the external private key,
+and the `publicKey` field contains the corresponding external public key.
+
+```proto
 message PublicKey {
   required Algorithm algorithm = 1;
 
@@ -718,29 +759,14 @@ message PublicKey {
 
   required bytes key = 2;
 }
-
-message Proof {
-  oneof Content {
-    bytes nextSecret = 1;
-    bytes finalSignature = 2;
-  }
-}
 ```
 
-The `rootKeyId` is a hint to decide which root public key should be used
-for signature verification.
+Public keys are serialized as a byte array, with the `algorithm` field discriminating between
+algorithms. The algorithm depedent serialization format is described in the [Cryptography section](#Algorithms).
 
-Each block contains a serialized byte array of the Datalog data (`block`),
-the next public key (`nextKey`) and the signature of that block and key
-by the previous key. The `version` field indicates the version of the signature
-payload format.
+### Datalog blocks
 
-The `proof` field contains either the private key corresponding to the
-public key in the last block (attenuable tokens) or a signature of the last
-block by the private key (sealed tokens).
-
-The `block` field is a byte array, containing a `Block` structure serialized
-in Protobuf format as well:
+The `Block` structure holds the Datalog data:
 
 ```proto
 message Block {
@@ -755,8 +781,14 @@ message Block {
 }
 ```
 
-Each block contains a `version` field, indicating at which datalog version it
-was generated. Since a Biscuit implementation at version N can receive a valid
+Each `Block` contains the following fields:
+- `symbols`: the list of new [symbols](#symbol-table) introduced in this block.
+- `context`: a free form field with no particular meaning for Biscuit authorization. It can be used to hold application specific data
+- `version`: indicates at which datalog version it was generated
+
+#### Block version
+
+Since a Biscuit implementation at version N can receive a valid
 token generated at version N-1, new implementations must be able to recognize
 older formats. Moreover, when appending a new block, they cannot convert the
 old blocks to the new format (since that would invalidate the signature). So
