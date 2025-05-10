@@ -777,12 +777,6 @@ The format version is encoded as a single integer:
 - The lowest supported datalog version is `v3.0`;
 - The highest supported datalog version is `v3.3`;
 
-# Format
-
-This is the format for the 3.x version of Biscuit.
-
-It transport expressions as an array of opcodes.
-
 ### Text format
 
 When transmitted as text, a Biscuit token should be serialized to a
