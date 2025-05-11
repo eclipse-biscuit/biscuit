@@ -684,8 +684,10 @@ Appending a new block to an existing biscuit token requires deserializing blocks
 
 The current version of the format is in [schema.proto](https://github.com/biscuit-auth/biscuit/blob/master/schema.proto)
 
-The token contains two levels of serialization. The main structure that will be
-transmitted over the wire is either the normal Biscuit wrapper:
+The token contains two levels of serialization, each with its own versioning scheme.
+
+### Signed blocks
+The main structure that will be transmitted over the wire is the Biscuit protobuf message:
 
 ```proto
 message Biscuit {
@@ -694,7 +696,30 @@ message Biscuit {
   repeated SignedBlock blocks = 3;
   required Proof proof = 4;
 }
+```
 
+The `rootKeyId` is a hint to decide which root public key should be used
+for signature verification.
+The `authority` block has a special meaning, as it is signed by the root key,
+so it is stored separately.
+The `blocks` field contains the rest of the block list, that must stay in the same order.
+The `proof` field contains either:
+- `nextSecret`: the private key corresponding to the `nextKey` public key in the last block (attenuable tokens)
+- `finalSignature`: a signature of the last block by that private key (sealed tokens).
+
+```proto
+message Proof {
+  oneof Content {
+    bytes nextSecret = 1;
+    bytes finalSignature = 2;
+  }
+}
+```
+
+The `SignedBlock` structure carries the sigend data and its signatures, representing the
+chain of trust starting from the root key.
+
+```proto
 message SignedBlock {
   required bytes block = 1;
   required PublicKey nextKey = 2;
@@ -702,12 +727,28 @@ message SignedBlock {
   optional ExternalSignature externalSignature = 4;
   optional uint32 version = 5;
 }
+```
 
+Each `SignedBlock` contains:
+- `block`: a `Block` structure serialized as a byte array
+- `nextKey`: the public key used to verify the next `SignedBlock`
+- `signature`: the signature of the current block
+- `externalSignature`: if present, it is a signature of the current block by another key
+- `version`: indicates the version of the signed payload format
+
+The version field is used to vary how the block is signed and verified.
+
+```proto
 message ExternalSignature {
   required bytes signature = 1;
   required PublicKey publicKey = 2;
 }
+```
 
+an `ExternalSignature` contains the `signature` of the signed block by the external private key,
+and the `publicKey` field contains the corresponding external public key.
+
+```proto
 message PublicKey {
   required Algorithm algorithm = 1;
 
@@ -718,29 +759,14 @@ message PublicKey {
 
   required bytes key = 2;
 }
-
-message Proof {
-  oneof Content {
-    bytes nextSecret = 1;
-    bytes finalSignature = 2;
-  }
-}
 ```
 
-The `rootKeyId` is a hint to decide which root public key should be used
-for signature verification.
+Public keys are serialized as a byte array, with the `algorithm` field discriminating between
+algorithms. The algorithm depedent serialization format is described in the [Cryptography section](#Algorithms).
 
-Each block contains a serialized byte array of the Datalog data (`block`),
-the next public key (`nextKey`) and the signature of that block and key
-by the previous key. The `version` field indicates the version of the signature
-payload format.
+### Datalog blocks
 
-The `proof` field contains either the private key corresponding to the
-public key in the last block (attenuable tokens) or a signature of the last
-block by the private key (sealed tokens).
-
-The `block` field is a byte array, containing a `Block` structure serialized
-in Protobuf format as well:
+The `Block` structure holds the Datalog data:
 
 ```proto
 message Block {
@@ -755,8 +781,14 @@ message Block {
 }
 ```
 
-Each block contains a `version` field, indicating at which datalog version it
-was generated. Since a Biscuit implementation at version N can receive a valid
+Each `Block` contains the following fields:
+- `symbols`: the list of new [symbols](#symbol-table) introduced in this block.
+- `context`: a free form field with no particular meaning for Biscuit authorization. It can be used to hold application specific data
+- `version`: indicates at which datalog version it was generated
+
+#### Block version
+
+Since a Biscuit implementation at version N can receive a valid
 token generated at version N-1, new implementations must be able to recognize
 older formats. Moreover, when appending a new block, they cannot convert the
 old blocks to the new format (since that would invalidate the signature). So
@@ -777,19 +809,13 @@ The format version is encoded as a single integer:
 - The lowest supported datalog version is `v3.0`;
 - The highest supported datalog version is `v3.3`;
 
-# Format
-
-This is the format for the 3.x version of Biscuit.
-
-It transport expressions as an array of opcodes.
-
 ### Text format
 
 When transmitted as text, a Biscuit token should be serialized to a
-URLS safe base 64 string. When the context does not indicate that it
+URL safe base 64 string. When the context does not indicate that it
 is a Biscuit token, that base 64 string should be prefixed with `biscuit:`.
 
-### Cryptography
+## Cryptography
 
 Biscuit tokens are based on public key cryptography, with a chain of
 signatures. Each block contains the serialized Datalog, the next public key,
@@ -798,7 +824,7 @@ corresponding to the last public key, to sign a new block and attenuate the
 token, or a signature of the last block by the last private key, to seal the
 token.
 
-#### Algorithms
+### Algorithms
 
 Biscuit supports multiple signature algorithms for its blocks, that can change
 between blocks in one token. The algorithm kind is defined in the `Algorithm`
@@ -808,7 +834,7 @@ of the last block.
 
 The following algorithms are supported:
 
-##### Ed25519
+#### Ed25519
 
 The default signature algorithm is Ed25519 as introduced in [Bernstein, Daniel J.;
 Duif, Niels; Lange, Tanja; Schwabe, Peter; Bo-Yin Yang (2012). "High-speed
@@ -820,7 +846,7 @@ The protobuf encoding is defined as follows:
 - `nextSecret` in the `Proof` message: [32 bytes of cryptographically secure random data in little-endian](https://www.rfc-editor.org/rfc/rfc8032#section-5.1.5)
 - `signature` field in `Signature` and `ExternalSignature` messages: [concatenation of R and S values](https://www.rfc-editor.org/rfc/rfc8032#section-5.1.6)
 
-##### ECDSA
+#### ECDSA
 
 Biscuit supports the ECDSA algorithm over the secp256r1 curve as defined in
 [SEC2v1](https://www.secg.org/sec1-v2.pdf), using the SHA-256 hashing
@@ -840,14 +866,14 @@ ECDSA-Sig-Value ::= SEQUENCE {
 }
 ```
 
-#### Signed payload generation
+### Signed payload generation
 
 The data covered by the signature algorithm depends on the `version` field of
 the `SignedBlock` message. If the field is absent, it defaults to version 0.
 
 Signature version 1 *must* be used for third-party blocks.
 
-##### Version 0 (deprecated)
+#### Version 0 (deprecated)
 
 This defines the block signature payload v0.
 
@@ -876,7 +902,7 @@ The signed payload format for external signatures, thereafter referred as "exter
 
 This format is not supported anymore and should be replaced by version 1.
 
-##### Version 1
+#### Version 1
 
 This defines the block signature payload v1.
 
@@ -907,7 +933,7 @@ To sign the block at index `n+1`, the signed payload format is the concatenation
   - the binary representation of the ASCII string "\0EXTERNALSIG\0"
   - `external_sig_n+1`: the optional external signature of the block
 
-the signed payload format for external signatures, thereafter referred as "external signature payload v1", is the concatenation of:
+The signed payload format for external signatures, thereafter referred as "external signature payload v1", is the concatenation of:
 - the binary representation of the ASCII string "\0EXTERNAL\0"
 - the binary representation of the ASCII string "\0VERSION\0"
 - the little endian representation of the version of the signature payload format
@@ -916,7 +942,7 @@ the signed payload format for external signatures, thereafter referred as "exter
 - the binary representation of the ASCII string "\0PREVSIG\0"
 - `sig_n`: the signature of the previous block
 
-#### Signature (one block)
+### Signature (one block)
 
 - `(pk_0, sk_0)` the root public and private keys
 - `data_0` the serialized Datalog
@@ -942,7 +968,7 @@ Token {
 }
 ```
 
-#### Signature (appending)
+### Signature (appending)
 
 With a token containing blocks 0 to n:
 
@@ -979,7 +1005,7 @@ Token {
 }
 ```
 
-##### Optional external signature
+#### Optional external signature
 
 Blocks generated by a trusted third party can carry an *extra* signature to provide a proof of their
 origin. Same as regular signatures, they rely on public key cryptography.
@@ -1011,7 +1037,7 @@ Token {
 
 Blocks signed with an external keypair must be at least v5.
 
-#### Verifying
+### Verifying
 
 For each block i from 0 to n:
 - `payload_i`: the signature payload for block i
@@ -1021,13 +1047,13 @@ If all signatures are verified, extract pk_n+1 from the last block and
 sk_n+1 from the proof field, and check that they are from the same
 key pair.
 
-##### Verifying external signatures
+#### Verifying external signatures
 
 For each block i from 1 to n, _where an external signature is present_:
 - `external_payload_i`: the external signature payload for block i
 - `verify(external_pk_i, external_sig_i, external_payload_i)`
 
-#### Signature (sealing)
+### Signature (sealing)
 
 With a token containing blocks 0 to n:
 
@@ -1055,7 +1081,7 @@ Token {
 }
 ```
 
-#### Verifying (sealed)
+### Verifying (sealed)
 
 For each block i from 0 to n:
 
@@ -1064,30 +1090,8 @@ For each block i from 0 to n:
 If all signatures are verified, extract pk_n+1 from the last block and
 sig from the proof field, and check `verify(pk_n+1, sig_n+1, data_n+alg_n+1+pk_n+1+sig_n)`
 
-### Blocks
 
-A block is defined as follows in the schema file:
-
-```proto
-message Block {
-  repeated string symbols = 1;
-  optional string context = 2;
-  optional uint32 version = 3;
-  repeated FactV2 facts_v2 = 4;
-  repeated RuleV2 rules_v2 = 5;
-  repeated CheckV2 checks_v2 = 6;
-  repeated Scope scope = 7;
-  repeated PublicKey publicKeys = 8;
-}
-```
-
-The block index is incremented for each new block. The Block 0
-is the authority block.
-
-Each block can provide facts either from its facts list, or generate
-them with its rules list.
-
-### Symbol table
+## Symbol table
 
 To reduce the token size and improve performance, Biscuit uses a symbol table,
 a list of strings that any fact or token can refer to by index. While
@@ -1128,9 +1132,9 @@ The symbol table is created from a default table containing, in order:
 Symbol table indexes from 0 to 1023 are reserved for the default symbols. Symbols
 defined in a token or authorizer must start from 1024.
 
-#### Adding content to the symbol table
+### Adding content to the symbol table
 
-##### Regular blocks (no external signature)
+#### Regular blocks (no external signature)
 
 When creating a new block, we start from the current symbol table of the token.
 For each fact or rule that introduces a new symbol, we add the corresponding
@@ -1145,7 +1149,7 @@ block in order, the block's symbols.
 It is important to verify that different blocks do not contain the same symbol in
 their list.
 
-##### third party blocks (with an external signature)
+#### Third party blocks (with an external signature)
 
 Blocks that are signed by an external key don't use the token symbol table
 and start from the default symbol table. Following blocks ignore the symbols
@@ -1156,7 +1160,7 @@ Similarly such blocks don't use the token public keys table and start from an em
 The reason for this is that the party signing the block is not supposed to have
 access to the token itself and can't use the token's symbol table or its public keys table.
 
-### Public key tables
+## Public key tables
 
 Public keys carried in `SignedBlock`s are stored as is, as they are required for verification.
 
@@ -1164,7 +1168,7 @@ Public keys carried in datalog scope annotations are stored in a table, to reduc
 
 Third-party blocks use an isolated public keys table, same as for symbols.
 
-#### Reading
+### Reading
 
 Building a symbol table for a token can be done this way:
 
@@ -1174,7 +1178,7 @@ for each block (if it does not have an external signature):
 
 Blocks with an external signature use their own table and don't affect the rest of the token.
 
-#### Appending
+### Appending
 
 Same as for symbols, the `publicKeys` field should only contain public keys
 that were not present in the table yet.
