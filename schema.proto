@@ -44,9 +44,9 @@ message Block {
   repeated string symbols = 1;
   optional string context = 2;
   optional uint32 version = 3;
-  repeated FactV2 facts_v2 = 4;
-  repeated RuleV2 rules_v2 = 5;
-  repeated CheckV2 checks_v2 = 6;
+  repeated Fact facts = 4;
+  repeated Rule rules = 5;
+  repeated Check checks = 6;
   repeated Scope scope = 7;
   repeated PublicKey publicKeys = 8;
 }
@@ -63,19 +63,19 @@ message Scope {
   }
 }
 
-message FactV2 {
-  required PredicateV2 predicate = 1;
+message Fact {
+  required Predicate predicate = 1;
 }
 
-message RuleV2 {
-  required PredicateV2 head = 1;
-  repeated PredicateV2 body = 2;
-  repeated ExpressionV2 expressions = 3;
+message Rule {
+  required Predicate head = 1;
+  repeated Predicate body = 2;
+  repeated Expression expressions = 3;
   repeated Scope scope = 4;
 }
 
-message CheckV2 {
-  repeated RuleV2 queries = 1;
+message Check {
+  repeated Rule queries = 1;
   optional Kind kind = 2;
 
   enum Kind {
@@ -85,12 +85,12 @@ message CheckV2 {
   }
 }
 
-message PredicateV2 {
+message Predicate {
   required uint64 name = 1;
-  repeated TermV2 terms = 2;
+  repeated Term terms = 2;
 }
 
-message TermV2 {
+message Term {
   oneof Content {
     uint32 variable = 1;
     int64 integer = 2;
@@ -106,11 +106,11 @@ message TermV2 {
 }
 
 message TermSet {
-  repeated TermV2 set = 1;
+  repeated Term set = 1;
 }
 
 message Array {
-  repeated TermV2 array = 1;
+  repeated Term array = 1;
 }
 
 message Map {
@@ -119,7 +119,7 @@ message Map {
 
 message MapEntry {
   required MapKey key = 1;
-  required TermV2 value = 2;
+  required Term value = 2;
 }
 
 message MapKey {
@@ -129,13 +129,13 @@ message MapKey {
   }
 }
 
-message ExpressionV2 {
+message Expression {
   repeated Op ops = 1;
 }
 
 message Op {
   oneof Content {
-    TermV2 value = 1;
+    Term value = 1;
     OpUnary unary = 2;
     OpBinary Binary = 3;
     OpClosure closure = 4;
@@ -186,7 +186,7 @@ message OpBinary {
     Any = 26;
     Get = 27;
     Ffi = 28;
-    Try = 29;
+    TryOr = 29;
   }
 
   required Kind kind = 1;
@@ -204,16 +204,16 @@ message Policy {
     Deny = 1;
   }
 
-  repeated RuleV2 queries = 1;
+  repeated Rule queries = 1;
   required Kind kind = 2;
 }
 
 message AuthorizerPolicies {
   repeated string symbols = 1;
   optional uint32 version = 2;
-  repeated FactV2 facts = 3;
-  repeated RuleV2 rules = 4;
-  repeated CheckV2 checks = 5;
+  repeated Fact facts = 3;
+  repeated Rule rules = 4;
+  repeated Check checks = 5;
   repeated Policy policies = 6;
 }
 
@@ -263,15 +263,15 @@ message Empty {}
 
 message GeneratedFacts {
   repeated Origin origins = 1;
-  repeated FactV2 facts = 2;
+  repeated Fact facts = 2;
 }
 
 message SnapshotBlock {
   optional string context = 1;
   optional uint32 version = 2;
-  repeated FactV2 facts_v2 = 3;
-  repeated RuleV2 rules_v2 = 4;
-  repeated CheckV2 checks_v2 = 5;
+  repeated Fact facts = 3;
+  repeated Rule rules = 4;
+  repeated Check checks = 5;
   repeated Scope scope = 6;
   optional PublicKey externalKey = 7;
 }

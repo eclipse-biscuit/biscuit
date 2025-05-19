@@ -1073,9 +1073,9 @@ message Block {
   repeated string symbols = 1;
   optional string context = 2;
   optional uint32 version = 3;
-  repeated FactV2 facts_v2 = 4;
-  repeated RuleV2 rules_v2 = 5;
-  repeated CheckV2 checks_v2 = 6;
+  repeated Fact facts = 4;
+  repeated Rule rules = 5;
+  repeated Check checks = 6;
   repeated Scope scope = 7;
   repeated PublicKey publicKeys = 8;
 }
