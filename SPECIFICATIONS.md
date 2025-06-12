@@ -148,10 +148,10 @@ bitwise and, bitwise or, bitwise xor, lenient equal, lenient not equal, typeof.
 
 A _string_ is a suite of UTF-8 characters. It supports the following
 operations: prefix, suffix, strict equal, strict not equal, set inclusion, regular
-expression, concatenation (with `+`), substring test (with `.contains()`), lenient equal, lenient not equal, typeof.
+expression, concatenation (with `+`), substring test (with `.contains()`), lenient equal, lenient not equal, length, typeof.
 
 A _byte array_ is a suite of bytes. It supports the following
-operations: strict equal, strict not equal, set inclusion, lenient equal, lenient not equal, typeof.
+operations: strict equal, strict not equal, set inclusion, lenient equal, lenient not equal, length, typeof.
 
 A _date_ is a 64 bit unsigned integer representing a UTC unix timestamp (number of seconds since 1970-01-01T00:00:00Z). It supports
 the following operations: `<`, `<=` (before), `>`, `>=` (after), strict equal,
@@ -164,11 +164,11 @@ A _null_ is a default type indicating the absence of value. It supports `===` (s
 
 A _set_ is a deduplicated list of terms of the same type. It cannot contain
 variables or other sets. It supports strict equal, strict not equal, intersection, union,
-set inclusion, lenient equal, lenient not equal, any, all, typeof.
+set inclusion, lenient equal, lenient not equal, any, all, length, typeof.
 
-An _array_ is an ordered list of terms, not necessarily of the same type. It supports `===` (strict equal), `!==` (strict not equal), `==` (lenient equal) and `!=` (lenient not equal), contains, prefix, suffix, get, typeof.
+An _array_ is an ordered list of terms, not necessarily of the same type. It supports `===` (strict equal), `!==` (strict not equal), `==` (lenient equal) and `!=` (lenient not equal), contains, prefix, suffix, get, any, all, length, typeof.
 
-A _map_ is an unordered collection of key/value pairs, with unique keys. Keys are either strings or integers, values can be any term. It supports `===` (strict equal), `!==` (strict not equal), `==` (lenient equal) and `!=` (lenient not equal), contains, get, typeof.
+A _map_ is an unordered collection of key/value pairs, with unique keys. Keys are either strings or integers, values can be any term. It supports `===` (strict equal), `!==` (strict not equal), `==` (lenient equal) and `!=` (lenient not equal), contains, get, any, all, length, typeof.
 
 #### Grammar
 
@@ -470,7 +470,7 @@ Here are the currently defined unary operations:
 - _negate_: boolean negation
 - _parens_: returns its argument without modification (this is used when printing
   the expression, to avoid precedence errors)
-- _length_: defined on strings, byte arrays and sets (for strings, _length_ is defined as the number of bytes in the UTF-8 encoded string; the alternative of counting grapheme clusters would be inconsistent between languages)
+- _length_: defined on strings, byte arrays, sets, arrays and maps (for strings, _length_ is defined as the number of bytes in the UTF-8 encoded string; the alternative of counting grapheme clusters would be inconsistent between languages)
 - _type_, defined on all types, returns a string (v3.3+)
   - `integer`
   - `string`
@@ -479,6 +479,8 @@ Here are the currently defined unary operations:
   - `bool`
   - `set`
   - `null`
+  - `array`
+  - `map`
 - *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v3.3+)
 
 Here are the currently defined binary operations:
@@ -487,12 +489,13 @@ Here are the currently defined binary operations:
 - _greater than_, defined on integers and dates, returns a boolean
 - _less or equal_, defined on integers and dates, returns a boolean
 - _greater or equal_, defined on integers and dates, returns a boolean
-- _strict equal_, defined on integers, strings, byte arrays, dates, set, null, returns a boolean
-- _strict not equal_, defined on integers, strings, byte arrays, dates, set, null, returns a boolean (v3.1+)
-- _contains_ takes a set and another value as argument, returns a boolean. Between two sets, indicates if the first set is a superset of the second one.
-  between two strings, indicates a substring test.
-- _prefix_, defined on strings, returns a boolean
-- _suffix_, defined on strings, returns a boolean
+- _strict equal_, defined on all types, returns a boolean
+- _strict not equal_, defined on all types, returns a boolean (v3.1+)
+- _contains_ defined on a set, array, or map and any other value as argument, returns a boolean.
+  Between two sets, indicates if the first set is a superset of the second one. between two strings,
+  indicates a substring test.
+- _prefix_, defined on strings and arrays, returns a boolean
+- _suffix_, defined on strings and arrays, returns a boolean
 - _regex_, defined on strings, returns a boolean
 - _add_, defined on integers, returns an integer. Defined on strings, concatenates them.
 - _sub_, defined on integers, returns an integer
@@ -507,8 +510,10 @@ Here are the currently defined binary operations:
 - _bitwiseXor_, defined on integers, returns an integer (v3.1+)
 - _lenient equal_, defined on all types, returns a boolean (v3.3+)
 - _lenient not equal_, defined on all types, returns a boolean (v3.3+)
-- _any_, defined on sets, takes a closure term -> boolean, returns a boolean (v3.3+)
-- _all_, defined on sets, takes a closure term -> boolean, returns a boolean (v3.3+)
+- _any_, defined on sets, arrays, and maps. Takes a closure term -> boolean, returns a boolean
+  (v3.3+). For maps, argument is an array containing the key and value.
+- _any_, defined on sets, arrays, and maps. Takes a closure term -> boolean, returns a boolean
+  (v3.3+). For maps, argument is an array containing the key and value.
 - _short circuiting and_, defined on booleans, takes a closure () -> boolean, returns a boolean (v3.3+)
 - _short circuiting or_, defined on booleans, takes a closure () -> boolean, returns a boolean (v3.3+)
 - _get_, defined on arrays and maps (v3.3+)
