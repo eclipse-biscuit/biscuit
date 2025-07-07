@@ -494,6 +494,7 @@ Here are the currently defined binary operations:
 - _contains_ defined on a set, array, or map and any other value as argument, returns a boolean.
   Between two sets, indicates if the first set is a superset of the second one. between two strings,
   indicates a substring test.
+  For a map, returns whether the argument is a key of the map, false otherwise, including when the argument is neither an int or a string
 - _prefix_, defined on strings and arrays, returns a boolean
 - _suffix_, defined on strings and arrays, returns a boolean
 - _regex_, defined on strings, returns a boolean
