@@ -31,7 +31,7 @@ Current status:
   - [Python](https://github.com/eclipse-biscuit/biscuit-python) (based on the Rust version)
   - [Haskell](https://github.com/eclipse-biscuit/biscuit-haskell)
 - we have implementations for biscuits v1 in
-  - [Java](https://github.com/eclipse-biscuit/biscuit-java) (migration to v2 is in progress)
+  - [Java](https://github.com/eclipse-biscuit/biscuit-java) (implementation of v3.3 is in progress)
   - [Go](https://github.com/eclipse-biscuit/biscuit-go)
   - [.Net](https://github.com/dmunch/biscuit-net)
 - a website with documentation and an interactive playground is live at <https://biscuitsec.org>
@@ -48,20 +48,22 @@ The different implementations are following the specification closely, but parts
 
 |                    | Rust | Haskell | Java | Go | Python | C# |
 |--------------------|------|---------|------|----|--------|----|
-|**v2**              |  ✅  |    ✅   |  ✅  | ✅ |   ✅   | ✅ |
-|**v3**              |  ✅  |    ✅   |  🚧  | ❌ |   ✅   | ✅ |
+|**v3.0**            |  ✅  |    ✅   |  ✅  | ✅ |   ✅   | ✅ |
+|**v3.1**            |  ✅  |    ✅   |  🚧  | ❌ |   ✅   | ✅ |
 | scopes             |  ✅  |    ✅   |  ✅  | ❌ |   ✅   | ✅ |
 | check all          |  ✅  |    ✅   |  ✅  | ❌ |   ✅   | ✅ |
 | bitwise operations |  ✅  |    ✅   |  ✅  | ❌ |   ✅   | ✅ |
-| third party blocks |  ✅  |    ✅   |  🚧  | ❌ |   🚧   | ✅ |
 | snapshots          |  ✅  |    ❌   |  🚧  | ❌ |   ✅   | ❌ |
+|**v3.2**            |  ✅  |    ✅   |  🚧  | ❌ |   ✅   | ✅ |
+| third party blocks |  ✅  |    ✅   |  🚧  | ❌ |   🚧   | ✅ |
+|**v3.3**            |  ✅  |    ✅   |  🚧  | ❌ |   ✅   | ✅ |
 
 
 ## How to help us?
 
 - provide use cases that we can test the token on (some specific kind of checks, auth delegation, etc)
 - cryptographic design audit: we need reviews of algorithms, their usage and implementation in various languages
-- add support for biscuit v2 to java and go implementations
+- add support for biscuit v3.2 to java and go implementations
 
 ## Project organisation
 
