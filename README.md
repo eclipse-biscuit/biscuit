@@ -25,14 +25,14 @@ You can follow the next steps on the [roadmap](https://github.com/biscuit-auth/b
 Current status:
 
 - the credentials language, cryptographic primitives and serialization format are done
-- we have implementations for biscuits v2 in
-  - [Rust](https://github.com/biscuit-auth/biscuit-rust)
-  - [Web Assembly](https://github.com/biscuit-auth/biscuit-wasm) (based on the Rust version)
-  - [Python](https://github.com/biscuit-auth/biscuit-python) (based on the Rust version)
-  - [Haskell](https://github.com/biscuit-auth/biscuit-haskell)
+- we have implementations for biscuits v3.x in
+  - [Rust](https://github.com/eclipse-biscuit/biscuit-rust)
+  - [Web Assembly](https://github.com/eclipse-biscuit/biscuit-wasm) (based on the Rust version)
+  - [Python](https://github.com/eclipse-biscuit/biscuit-python) (based on the Rust version)
+  - [Haskell](https://github.com/eclipse-biscuit/biscuit-haskell)
 - we have implementations for biscuits v1 in
-  - [Java](https://github.com/clevercloud/biscuit-java) (migration to v2 is in progress)
-  - [Go](https://github.com/biscuit-auth/biscuit-go)
+  - [Java](https://github.com/eclipse-biscuit/biscuit-java) (implementation of v3.3 is in progress)
+  - [Go](https://github.com/eclipse-biscuit/biscuit-go)
   - [.Net](https://github.com/dmunch/biscuit-net)
 - a website with documentation and an interactive playground is live at <https://biscuitsec.org>
 - Currently deploying to real world use cases such as [Apache Pulsar](https://github.com/clevercloud/biscuit-pulsar) at [Clever Cloud](https://www.clever-cloud.com/)
@@ -48,20 +48,22 @@ The different implementations are following the specification closely, but parts
 
 |                    | Rust | Haskell | Java | Go | Python | C# |
 |--------------------|------|---------|------|----|--------|----|
-|**v2**              |  ✅  |    ✅   |  ✅  | ✅ |   ✅   | ✅ |
-|**v3**              |  ✅  |    ✅   |  🚧  | ❌ |   ✅   | ✅ |
+|**v3.0**            |  ✅  |    ✅   |  ✅  | ✅ |   ✅   | ✅ |
+|**v3.1**            |  ✅  |    ✅   |  🚧  | ❌ |   ✅   | ✅ |
 | scopes             |  ✅  |    ✅   |  ✅  | ❌ |   ✅   | ✅ |
 | check all          |  ✅  |    ✅   |  ✅  | ❌ |   ✅   | ✅ |
 | bitwise operations |  ✅  |    ✅   |  ✅  | ❌ |   ✅   | ✅ |
-| third party blocks |  ✅  |    ✅   |  🚧  | ❌ |   🚧   | ✅ |
 | snapshots          |  ✅  |    ❌   |  🚧  | ❌ |   ✅   | ❌ |
+|**v3.2**            |  ✅  |    ✅   |  🚧  | ❌ |   ✅   | ✅ |
+| third party blocks |  ✅  |    ✅   |  🚧  | ❌ |   🚧   | ✅ |
+|**v3.3**            |  ✅  |    ✅   |  🚧  | ❌ |   ✅   | ✅ |
 
 
 ## How to help us?
 
 - provide use cases that we can test the token on (some specific kind of checks, auth delegation, etc)
 - cryptographic design audit: we need reviews of algorithms, their usage and implementation in various languages
-- add support for biscuit v2 to java and go implementations
+- add support for biscuit v3.2 to java and go implementations
 
 ## Project organisation
 
