@@ -25,14 +25,14 @@ You can follow the next steps on the [roadmap](https://github.com/biscuit-auth/b
 Current status:
 
 - the credentials language, cryptographic primitives and serialization format are done
-- we have implementations for biscuits v2 in
-  - [Rust](https://github.com/biscuit-auth/biscuit-rust)
-  - [Web Assembly](https://github.com/biscuit-auth/biscuit-wasm) (based on the Rust version)
-  - [Python](https://github.com/biscuit-auth/biscuit-python) (based on the Rust version)
-  - [Haskell](https://github.com/biscuit-auth/biscuit-haskell)
+- we have implementations for biscuits v3.x in
+  - [Rust](https://github.com/eclipse-biscuit/biscuit-rust)
+  - [Web Assembly](https://github.com/eclipse-biscuit/biscuit-wasm) (based on the Rust version)
+  - [Python](https://github.com/eclipse-biscuit/biscuit-python) (based on the Rust version)
+  - [Haskell](https://github.com/eclipse-biscuit/biscuit-haskell)
 - we have implementations for biscuits v1 in
-  - [Java](https://github.com/clevercloud/biscuit-java) (migration to v2 is in progress)
-  - [Go](https://github.com/biscuit-auth/biscuit-go)
+  - [Java](https://github.com/eclipse-biscuit/biscuit-java) (migration to v2 is in progress)
+  - [Go](https://github.com/eclipse-biscuit/biscuit-go)
   - [.Net](https://github.com/dmunch/biscuit-net)
 - a website with documentation and an interactive playground is live at <https://biscuitsec.org>
 - Currently deploying to real world use cases such as [Apache Pulsar](https://github.com/clevercloud/biscuit-pulsar) at [Clever Cloud](https://www.clever-cloud.com/)
