@@ -15,7 +15,7 @@ The owner of `example.org` may expose a list of public key descriptors
 
 - served over HTTPS;
 - for GET requests;
-- at `./well-known/biscuit-web-keys`;
+- at `/.well-known/biscuit-web-keys`;
 - with a JSON payload (described below) as the response body.
 
 The response body must conform to the following schema:
