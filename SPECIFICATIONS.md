@@ -104,7 +104,7 @@ variables bound to the corresponding values).
 
 A _check_ is a list of _query_ for which the token validation will fail if it cannot
 produce any fact. A single query needs to match for the fact to succeed.
-If any of the cheks fails, the entire verification fails.
+If any of the checks fails, the entire verification fails.
 
 An _allow policy_ or _deny policy_ is a list of _query_. If any of the queries produces something,
 the policy matches, and we stop there, otherwise we test the next one. If an
