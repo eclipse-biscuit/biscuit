@@ -455,82 +455,173 @@ After executing, the stack must contain only one value, of the boolean type.
 
 ##### Closures
 
-Closures are evaluated recursively. When executing a closure, a new empty stack is created, and the closure opcodes are evaluated. After evaluation, the stack must contain only one value, of any type, which is then pushed on the parent stack.
+Closures are evaluated recursively. When executing a closure, a new empty stack is created, and the
+closure opcodes are evaluated. After evaluation, the stack must contain only one value, of any type,
+which is then pushed on the parent stack.
 
-The closure arguments are treated the same way as datalog variables and are replaced by their value when the corresponding opcode is evaluated.
+The closure arguments are treated the same way as datalog variables and are replaced by their value
+when the corresponding opcode is evaluated.
 
-Shadowing (defining a parameter with the same name as a variable already in scope) is not allowed and should be rejected before starting the evaluation.
+Shadowing (defining a parameter with the same name as a variable already in scope) is not allowed
+and should be rejected before starting the evaluation.
 
-Short-circuiting boolean operators (`&&` and `||`) are implemented using closures: the right-hand side is defined in a closure (taking zero arguments) and is only evaluated as needed.
+##### Unary Operators
 
-##### Operations
+| Opcode | Datalog Syntax | Version | Supported Operand Types        | Return Type
+| ------ | -------------- | ------- | ------------------------------ | --------------------
+| Negate | !expr          | 3.0     | bool                           | bool
+| Parens | (expr)         | 3.0     | all types                      | operand type
+| Length | expr.length()  | 3.0     | string, bytes, set, array, map | int
+| TypeOf | expr.type()    | 3.3     | all types                      | string
+| Ffi    | _see FFI_      | 3.3     | all types                      | all types
 
-Here are the currently defined unary operations:
+Behavior:
 
-- _negate_: boolean negation
-- _parens_: returns its argument without modification (this is used when printing
-  the expression, to avoid precedence errors)
-- _length_: defined on strings, byte arrays, sets, arrays and maps (for strings, _length_ is defined as the number of bytes in the UTF-8 encoded string; the alternative of counting grapheme clusters would be inconsistent between languages)
-- _type_, defined on all types, returns a string (v3.3+)
-  - `integer`
-  - `string`
-  - `date`
-  - `bytes`
-  - `bool`
-  - `set`
-  - `null`
-  - `array`
-  - `map`
-- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v3.3+)
+- **Negate:** Negates the expression
+- **Parens:** Evaluates to the expression unchanged; included to support printing binary operators
+  with the correct precedence
+- **Length**: Returns the length of the argument. For strings this is the number of bytes in the
+  string's UTF-8 encoding.
+- **TypeOf**: Returns the name of the type as a string. The names of the types are:
+  - `"integer"`
+  - `"string"`
+  - `"date"`
+  - `"bytes"`
+  - `"bool"`
+  - `"set"`
+  - `"null"`
+  - `"array"`
+  - `"map"`
+- **Ffi:** Calls that FFI function _(see FFI)_
+
+##### Binary Operators
 
 Here are the currently defined binary operations:
 
-- _less than_, defined on integers and dates, returns a boolean
-- _greater than_, defined on integers and dates, returns a boolean
-- _less or equal_, defined on integers and dates, returns a boolean
-- _greater or equal_, defined on integers and dates, returns a boolean
-- _strict equal_, defined on all types, returns a boolean
-- _strict not equal_, defined on all types, returns a boolean (v3.1+)
-- _contains_ defined on a set, array, or map and any other value as argument, returns a boolean.
-  Between two sets, indicates if the first set is a superset of the second one. between two strings,
-  indicates a substring test.
-  For a map, returns whether the argument is a key of the map, false otherwise, including when the argument is neither an int or a string
-- _prefix_, defined on strings and arrays, returns a boolean
-- _suffix_, defined on strings and arrays, returns a boolean
-- _regex_, defined on strings, returns a boolean
-- _add_, defined on integers, returns an integer. Defined on strings, concatenates them.
-- _sub_, defined on integers, returns an integer
-- _mul_, defined on integers, returns an integer
-- _div_, defined on integers, returns an integer
-- _eager and_, defined on booleans, returns a boolean
-- _eager or_, defined on booleans, returns a boolean
-- _intersection_, defined on sets, return a set that is the intersection of both arguments
-- _union_, defined on sets, return a set that is the union of both arguments
-- _bitwiseAnd_, defined on integers, returns an integer (v3.1+)
-- _bitwiseOr_, defined on integers, returns an integer (v3.1+)
-- _bitwiseXor_, defined on integers, returns an integer (v3.1+)
-- _lenient equal_, defined on all types, returns a boolean (v3.3+)
-- _lenient not equal_, defined on all types, returns a boolean (v3.3+)
-- _any_, defined on sets, arrays, and maps. Takes a closure term -> boolean, returns a boolean
-  (v3.3+). For maps, argument is an array containing the key and value.
-- _any_, defined on sets, arrays, and maps. Takes a closure term -> boolean, returns a boolean
-  (v3.3+). For maps, argument is an array containing the key and value.
-- _short circuiting and_, defined on booleans, takes a closure () -> boolean, returns a boolean (v3.3+)
-- _short circuiting or_, defined on booleans, takes a closure () -> boolean, returns a boolean (v3.3+)
-- _get_, defined on arrays and maps (v3.3+)
-  on arrays, takes an integer and returns the corresponding element (or `null`, if out of bounds)  
-  on maps, takes either an integer or a string and returns the corresponding element (or `null`, if out of bounds)
-- *external* call: implementation-defined, allows the datalog engine to call out to a function provided by the host language. The external call name is an interned string, stored in the symbol table (v3.3+)
-- _try_, takes a closure () -> any type and a value, returns the result of the closure if it evaluates without error, or returns the value if the closure evaluates to an error (v3.3+)
+| Opcode                | Datalog Syntax      | Version            | Supported Operand Types                          | Return Type 
+| --------------------- | ------------------- | ------------------ | ------------------------------------------------ | --------
+| LessThan              | `x < y`             | 3.0                | (int, int), (date, date)                         | bool
+| GreaterThan           | `x > y`             | 3.0                | (int, int), (date, date)                         | bool
+| LessOrEqual           | `x <= y`            | 3.0                | (int, int), (date, date)                         | bool
+| GreaterOrEqual        | `x >= y`            | 3.0                | (int, int), (date, date)                         | bool
+| Equal                 | `x === y`           | 3.0 _see equality_ | all types _see equality_                         | bool
+| NotEqual              | `x !== y`           | 3.1 _see equality_ | all types _see equality_                         | bool
+| HeterogeneousEqual    | `x == y`            | 3.3 _see equality_ | all types _see equality_                         | bool
+| HeterogeneousNotEqual | `x != y`            | 3.3 _see equality_ | all types _see equality_                         | bool
+| Contains              | `x.contains(y)`     | 3.0                | (string, string), (set | array | map, any type)  | bool
+| Prefix                | `x.starts_with(y)`  | 3.0                | (string, string), (bytes, bytes), (array, array) | bool
+| Suffix                | `x.ends_with(y)`    | 3.0                | (string, string), (bytes, bytes), (array, array) | bool
+| Regex                 | `x.match(y)`        | 3.0                | (string, string)                                 | bool
+| Add                   | `x + y`             | 3.0                | (int, int) (string, string)                      | operand type
+| Sub                   | `x - y`             | 3.0                | (int, int)                                       | int
+| Mul                   | `x * y`             | 3.0                | (int, int)                                       | int
+| Div                   | `x / y`             | 3.0                | (int, int)                                       | int
+| And                   | _see and/or_        | 3.0 _see and/or_   | (bool, bool)                                     | bool
+| Or                    | _see and/or_        | 3.0 _see and/or_   | (bool, bool)                                     | bool
+| LazyAnd               | `x && y`            | 3.3 _see and/or_   | (bool, bool closure)                             | bool
+| LazyOr                | `x || y`            | 3.3 _see and/or_   | (bool, bool closure)                             | bool
+| Intersection          | `x.intersection(y)` | 3.0                | (set, set)                                       | set
+| Union                 | `x.union(y)`        | 3.0                | (set, set)                                       | set
+| BitwiseAnd            | `x & y`             | 3.1                | (int, int)                                       | int
+| BitwiseOr             | `x | y`             | 3.1                | (int, int)                                       | int
+| BitwiseXor            | `x ^ y`             | 3.1                | (int, int)                                       | int
+| All                   | `x.all(y)`          | 3.3                | (set | array | map, bool closure)                | bool
+| Any                   | `x.any(y)`          | 3.3                | (set | array | map, bool closure),               | bool
+| Get                   | `x.get(y)`          | 3.3                | (array, int), (map, int | string)                | all types
+| TryOr                 | `x.try_or(y)`       | 3.3                | (closure, all types) _see try_or_                | all types
+| Ffi                   | _see FFI_           | 3.3                | all types                                        | all types
 
-Integer operations must have overflow checks. If it overflows, the expression
-fails.
+Behavior:
 
-Strict equality fails with a type error when trying to compare different types.
+- **LessThan:** Returns whether the left operand is less than the right operand
+- **GreaterThan:** Returns whether the left operand is greater than the right operand
+- **LessThanOrEqual:** Returns whether the left operand is less than or equal the right operand
+- **GreaterThanOrEqual:** Returns whether the left operand is greater than or equal the right operand
+- **Equal:** Returns whether the operands are equal; throws a type error if the operands have
+  different types
+- **NotEqual:** Returns whether the operands are not equal; throws a type error if the operands have
+  different types
+- **HeterogeneousEqual:** Returns whether the operands are equal; returns false if the operands have
+  different types
+- **HeterogeneousNotEqual:** Returns whether the operands are not equal; returns false if the
+  operands have different types
+- **Contains:** For strings, returns whether the righ toperand is a substring of the left operand.
+  For sets, arrays, and maps, returns whether the right operand is an element of the left operand;
+  if the right and left operands are both sets, returns whether the right operand is a a subset of
+  the left operand.
+- **Prefix:** Returns whether the right operand is a prefix of the left operand
+- **Suffix:** Returns whether the right operand is a suffix of the left operand
+- **Regex:** Interpreting the right operand as a regex, returns whether it matches the left operand
+- **Add:** On integer operands, adds them together; on string operands concatenates them. _(see overflow)_
+- **Sub:** Subtracts the right operand from the left operand. _(see overflow)_
+- **Mul:** Multiplies the operands together. _(see overflow)_
+- **Div:** Divides the left operand by the right operand. _(see overflow)_
+- **And:** Returns whether both operands are true. _(see overflow)_
+- **Or:** Returns whether either operand is true. _(see overflow)_
+- **LazyAnd:** Returns whether both operands are true, evaluating the right only if the left is true
+- **LazyOr:** Returns whether either operand is true, evaluating the right only if the left is false
+- **Intersection:** Returns the set intersection of the two operands
+- **Union:** Returns the set union of the two operands
+- **BitwiseAnd:** Returns the bitwise and of the two operands
+- **BitwiseOr:** Returns the bitwise or of the two operands
+- **BitwiseXor:** Returns the bitwise xor of the two operands
+- **All:** Returns whether the closure evaluates to true against all elements in the collection;
+  must short circuit if the closure evaluates to false against any element. For sets and arrays, the
+  closure takes a single argument (the element of the collection); for maps, the closure takes two
+  (both the key and its associated value).
+- **Any:** Returns whether the closure evaluates to true against any element of the collection;
+  must short circuit if the closure evaluates to true against any element. For sets and arrays, the
+  closure takes a single argument (the element of the collection); for maps, the closure takes two
+  (both the key and its associated value).
+- **Get:** Returns the value under that key (for arrays, the integer index into the array; for maps,
+  the key in the map).
+- **TryOr:** Evaluates the left operand; if it evaluates without error, returns the value it
+  evaluates to. If it throws any error, swallows that error and evaluates to the right operand.
+- **FFI:** Calls that FFI function _(see FFI)_
 
-Lenient equality returns false when trying to compare different types.
+##### Equality
 
-External calls are implementation defined. External calls carry a function name, which can be used to call a user-defined function provided to the biscuit library. The function name is an interned string, stored in the symbol table.
+Prior to version 3.3, the `==` and `!=` syntax evaluated to `Equal` and `NotEqual`, rather than
+their heterogeneous equivalent.
+
+##### And/Or
+
+Prior to version 3.3, the `&&` and `||` syntax evaluated to `And` and `Or`, rather than their lazy
+equivalent.
+
+Though the lazy operators take a closure as their right operand, no closure appears in the surface
+syntax in Datalog. Instead, the right hand expression is compiled as if it were the body of a
+closure with no arguments.
+
+##### Overflow
+
+The integer arithmetic operators (add, sub, mul, div) all check for overflow. The expression
+overflows, it must fail and an evaluation error must occur.
+
+##### TryOr
+
+Though the left operand of TryOr is a closure, no closure appears in the surface syntax in Datalog.
+Instead, the left hand expression is compiled as if it were the body of a closure with no arguments.
+
+##### FFI
+
+FFI calls are implementation defined. Each carry a function name which is mapped to a user-defined
+function call provided to the biscuit library when evaluating the biscuit. This function can take
+one or two arguments, which will be supplied from the operands to the FFI operator. If no function
+with a matching name is provided, the expression throws an error.
+
+The syntax for FFI calls in Datalog is always method syntax, prefixing the name of the method with
+`extern::`. For example, a unary FFI call is written:
+
+```
+operand.extern::ffi_call_name()
+```
+
+And a binary FFI call is written:
+
+```
+left_operand.extern::ffi_call_name(right_operand)
+```
 
 #### Example
 
