@@ -30,6 +30,9 @@ HTTP cookies.
   An authorized biscuit may carry informations about the successful authorization such as
   the allow query that matched and the facts generated in the process
 - Authorizer: the context in which a biscuit is evaluated. An authorizer may carry facts,
+- Step: a Biscuit-specific unit of evaluation work counted by the authorizer
+  (testing a candidate fact against a rule-body predicate, executing a unary
+  or binary expression operation, or applying a closure) to bound execution cost.
   rules, checks and policies.
 
 ### Overview
@@ -67,7 +70,11 @@ simplifies its implementation and makes the check more precise.
 #### Terminology
 
 A Biscuit Datalog program contains _facts_ and _rules_, which are made of
-_predicates_ over the following types:
+A Biscuit Datalog program contains _facts_ and _rules_, which are made of
+_predicates_ applied to _terms_. A _term_ (from Datalog) is either a _variable_
+or a _constant term_ (a concrete value of one of the data types below).
+
+Terms have the following types:
 
 - _variable_
 - _integer_
@@ -85,7 +92,12 @@ use one for parsing and pretty printing of Datalog elements.
 
 A _predicate_ has the form `Predicate(v0, v1, ..., vn)`.
 
-A _fact_ is a _predicate_ that does not contain any _variable_.
+A _predicate_ has the form `name(t0, t1, ..., tn-1)`, where `name` is the
+predicate name, `t0 ... tn-1` are _terms_, and `n` is the predicate's _arity_
+(the number of terms).
+
+A _fact_ is a _predicate_ whose terms are all _constant terms_
+(it contains no _variable_, including inside nested collections).
 
 A _rule_ has the form:
 `Pr(r0, r1, ..., rk) <- P0(t0_1, t0_2, ..., t0_m1), ..., Pn(tn_1, tn_2, ..., tn_mn), E0(v0, ..., vi), ..., Ex(vx, ..., vy)`.
@@ -196,7 +208,7 @@ The logic language is described by the following EBNF grammar:
 
 <predicate> ::= <name> "(" <sp>? <term> (<sp>? "," <sp>? <term> )* <sp>? ")"
 <term> ::= <fact_term> | <variable>
-<fact_term> ::= <boolean> | <string> | <number> | ("hex:" <bytes>) | <date> | <null> | <set>
+<fact_term> ::= <boolean> | <string> | <number> | ("hex:" <bytes>) | <date> | <null> | <set> | <array> | <map>
 <set_term> ::= <boolean> | <string> | <number> | <bytes> | <date> | <null>
 
 
@@ -679,6 +691,119 @@ Returning the result:
 
 The verifier can also run queries over the loaded data. A query is a datalog rule,
 and the query's result is the produced facts.
+
+#### Step limit
+
+Datalog fact generation and expression evaluation are bounded by a step limit.
+Unlike a time limit, the number of steps taken depends only on the authorizer
+contents, so it is deterministic and finer-grained.
+
+The authorizer holds a step counter, starting at 0. Every time a step is taken,
+the counter is incremented. If the counter becomes greater than the step limit,
+the evaluation stops immediately with a "too many steps" error.
+
+##### Steps in rule evaluation
+
+Rule evaluation (in fact generation, checks, policies and queries) takes steps
+as follows:
+
+- for each predicate of the rule body, the _candidates_ are the facts that have
+  the same name and the same arity as the predicate, and whose origin is trusted
+  by the rule scope. Candidates are computed once, before matching
+- body predicates are matched in order. With the variables bound by the previous
+  predicates, each candidate considered for the current predicate takes one step,
+  whether it matches or not (a candidate can fail to match because of a constant
+  term, or because of a variable already bound to another value)
+- facts that are not candidates (different name or arity, untrusted origin) do
+  not take steps
+- a rule with no body predicates takes no steps for matching
+
+Example: with facts `a(1)`, `a(2)`, `a(3)`, `b(1)`, `b(2)`, the rule
+`c($x) <- a($x), b($x)` takes 3 steps for the `a` candidates, then 2 steps for the
+`b` candidates after each `a` fact: 3 + 3 × 2 = 9 steps.
+
+During fact generation, every rule is evaluated over all the matching facts on
+each iteration, including the last iteration, which generates no new facts. In
+the previous example, fact generation takes 18 steps.
+
+Checks and policies stop at the first successful match, so later candidates do
+not take steps:
+
+- `check if` and `reject if` stop when a combination of facts matches and the
+  expressions evaluate to `true`
+- `check all` stops when a combination of facts matches and the expressions
+  evaluate to `false`
+- an allow or deny policy stops when a combination of facts matches and the
+  expressions evaluate to `true`
+
+Queries evaluate the rule over all the matching facts.
+
+The order in which candidates are considered is not specified. Since checks
+and policies stop at the first successful match, the number of steps they take
+can differ between implementations for the same authorizer contents. The step
+limit is a safeguard against expensive evaluations, not an exact contract:
+implementations must count steps as described here, but are not expected to
+produce the exact same count.
+
+##### Steps in expression evaluation
+
+When a combination of facts matches the body predicates, the rule expressions
+are evaluated in order, stopping at the first expression that does not evaluate
+to `true`. Expression evaluation takes steps as follows:
+
+- a _value_ opcode takes no step
+- a _closure_ opcode (pushing the closure on the stack) takes no step
+- a _unary operation_ takes one step, before the operation is applied
+- a _binary operation_ takes one step, before the operation is applied. This
+  includes operations taking a closure as argument (`&&`, `||`, `.all()`,
+  `.any()`, `.try_or()`)
+- applying a closure takes one step, before its body is evaluated, even if the
+  body contains no operation. The opcodes of the body then take steps as described
+  above
+
+Examples:
+
+- `1 + 2 * 3` takes 2 steps
+- `[1, 2, 3].all($p -> $p > 0)` takes 7 steps: 1 for `.all()`, then for each
+  element, 1 for applying the closure and 1 for `>`
+- `[1, 2, 3].all($p -> true)` takes 4 steps
+- `{1, 2, 3}.any($p -> $p == 1)` takes 3 steps: `.any()` stops at the first element
+- `true || true` takes 1 step: the right-hand side closure is not applied
+- `false || true` takes 2 steps
+- `(true > 0).try_or(false)` takes 3 steps: 1 for `.try_or()`, 1 for applying the
+  closure, 1 for `>`, which fails with a type error, so `false` is returned
+
+A "too many steps" error is not an expression error: `.try_or()` must not catch
+it and return its fallback value.
+
+##### Sharing the step counter
+
+The step counter is shared by everything the authorizer evaluates over its
+lifetime: fact generation, then checks and policies in `authorize`, and queries.
+It is not reset between calls.
+
+The authorizer step limit applies to the total count since the authorizer was
+created. When a call takes explicit limits instead of the authorizer limits, its
+step limit applies to the steps taken during that call only: when entering the
+call, the maximum is set to the current count plus the call's step limit. This
+maximum is computed once, so fact generation and the checks, policies or queries
+of the same call share it.
+
+The default step limit is 1000.
+
+When the limit is reached, the value of the counter is not specified: the step
+that went over the limit may or may not be counted. The Rust implementation
+increments the counter before comparing it with the limit, so after a "too many
+steps" error, the counter is one more than the limit. As the count already
+depends on fact order, a difference of one between implementations is not an
+issue.
+
+##### Snapshots
+
+The step limit is stored in the `maxSteps` field of `RunLimits`, and the counter
+value is stored in the `elapsedSteps` field of `AuthorizerSnapshot`. When
+restoring a snapshot, the counter is set to `elapsedSteps` (0 if it is absent),
+and the step limit is set to `maxSteps` (the default limit if it is absent).
 
 ### Appending
 
@@ -1238,6 +1363,11 @@ Third-party blocks must at least have datalog version `3.2` (implementations not
 
 We provide sample tokens and the expected result of their verification at
 [https://github.com/biscuit-auth/biscuit/tree/master/samples](https://github.com/CleverCloud/biscuit/tree/master/samples)
+
+Each authorizer world in the samples contains an `elapsed_steps` value: the
+number of steps taken by the Rust implementation. It is provided for reference
+only: since the exact step count depends on fact order (see [Step limit](#step-limit)),
+implementations are not expected to match it.
 
 ## References
 
