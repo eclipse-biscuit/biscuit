@@ -633,6 +633,23 @@ block is the root public key it is expecting.
 A `Biscuit` contains in its `authority` and `blocks` fields
 some byte arrays that must be deserialized as a `Block`.
 
+##### Deserialization limits
+
+Implementations are encouraged to let verifiers restrict the contents of the
+tokens they accept, as an extra hardening measure. A token that does not respect
+these restrictions is rejected while it is deserialized, before its contents are
+loaded in an authorizer. This limits the resources an attacker can consume with
+a crafted token, and reduces the attack surface to the features an application
+actually uses. Restrictions can apply to the token as a whole (serialized size,
+number of blocks, sealed or unsealed tokens, third-party blocks, signature
+algorithms and signature version), and to each block, with separate settings
+for the authority block and for attenuation blocks, so that attenuations can
+be restricted more tightly: serialized size, number of facts, rules, checks,
+symbols and public keys, size of rule bodies and expressions, length of names,
+strings, byte arrays and collections, and the allowed term types, check kinds,
+operations, scopes and external functions. When the token is provided in base64,
+the size limit should be checked before decoding it.
+
 #### Authorization process
 
 The authorizer will first create a default symbol table, and will append to that table the values
