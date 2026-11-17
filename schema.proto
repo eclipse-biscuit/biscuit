@@ -233,12 +233,14 @@ message AuthorizerSnapshot {
   required RunLimits limits = 1;
   required uint64 executionTime = 2;
   required AuthorizerWorld world = 3;
+  optional uint64 elapsedSteps = 4;
 }
 
 message RunLimits {
   required uint64 maxFacts = 1;
   required uint64 maxIterations = 2;
   required uint64 maxTime = 3;
+  optional uint64 maxSteps = 4;
 }
 
 message AuthorizerWorld {

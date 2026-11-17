@@ -60,18 +60,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 1
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 1,
                         "check_id": 0,
                         "rule": "check if resource($0), operation(\"read\"), right($0, \"read\")"
@@ -117,10 +123,14 @@
         "": {
           "world": null,
           "result": {
-            "Err": {
-              "Format": {
-                "Signature": {
-                  "InvalidSignature": "signature error: Verification equation was not satisfied"
+            "type": "err",
+            "value": {
+              "type": "format",
+              "value": {
+                "type": "signature",
+                "value": {
+                  "type": "invalid_signature",
+                  "value": "signature error"
                 }
               }
             }
@@ -158,9 +168,12 @@
         "": {
           "world": null,
           "result": {
-            "Err": {
-              "Format": {
-                "BlockSignatureDeserializationError": "block signature deserialization error: [117, 149, 161, 18, 161, 235, 91, 129, 166, 227, 152, 133, 46, 97, 24, 183]"
+            "type": "err",
+            "value": {
+              "type": "format",
+              "value": {
+                "type": "block_signature_deserialization_error",
+                "value": "block signature deserialization error: [117, 149, 161, 18, 161, 235, 91, 129, 166, 227, 152, 133, 46, 97, 24, 183]"
               }
             }
           },
@@ -197,10 +210,14 @@
         "": {
           "world": null,
           "result": {
-            "Err": {
-              "Format": {
-                "Signature": {
-                  "InvalidSignature": "signature error: Verification equation was not satisfied"
+            "type": "err",
+            "value": {
+              "type": "format",
+              "value": {
+                "type": "signature",
+                "value": {
+                  "type": "invalid_signature",
+                  "value": "signature error"
                 }
               }
             }
@@ -238,10 +255,14 @@
         "": {
           "world": null,
           "result": {
-            "Err": {
-              "Format": {
-                "Signature": {
-                  "InvalidSignature": "signature error: Verification equation was not satisfied"
+            "type": "err",
+            "value": {
+              "type": "format",
+              "value": {
+                "type": "signature",
+                "value": {
+                  "type": "invalid_signature",
+                  "value": "signature error"
                 }
               }
             }
@@ -286,10 +307,14 @@
         "": {
           "world": null,
           "result": {
-            "Err": {
-              "Format": {
-                "Signature": {
-                  "InvalidSignature": "signature error: Verification equation was not satisfied"
+            "type": "err",
+            "value": {
+              "type": "format",
+              "value": {
+                "type": "signature",
+                "value": {
+                  "type": "invalid_signature",
+                  "value": "signature error"
                 }
               }
             }
@@ -383,18 +408,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 5
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 1,
                         "check_id": 0,
                         "rule": "check if resource($0), operation(\"read\"), right($0, \"read\")"
@@ -487,18 +518,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 3
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 1,
                         "check_id": 0,
                         "rule": "check if resource($0), operation(\"read\"), right($0, \"read\")"
@@ -566,18 +603,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 3
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 1,
                         "check_id": 1,
                         "rule": "check if time($time), $time <= 2018-12-20T00:00:00Z"
@@ -660,18 +703,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 2
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Authorizer": {
+                      "type": "authorizer",
+                      "value": {
                         "check_id": 0,
                         "rule": "check if right($0, $1), resource($0), operation($1)"
                       }
@@ -736,18 +785,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 2
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Authorizer": {
+                      "type": "authorizer",
+                      "value": {
                         "check_id": 0,
                         "rule": "check if right($0, $1), resource($0), operation($1)"
                       }
@@ -803,10 +858,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 1
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "resource(\"file1\");\noperation(\"read\");\n\nallow if true;\n",
           "revocation_ids": [
@@ -837,18 +894,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 1
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 0,
                         "rule": "check if resource(\"file1\")"
@@ -943,10 +1006,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 14
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "resource(\"file1\");\ntime(2020-12-21T09:23:12Z);\n\nallow if true;\n",
           "revocation_ids": [
@@ -995,18 +1060,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 5
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 1,
                         "check_id": 0,
                         "rule": "check if valid_date($0), resource($0)"
@@ -1064,18 +1135,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 2
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 0,
                         "rule": "check if resource($0), $0.matches(\"file[0-9]+.txt\")"
@@ -1114,10 +1191,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 2
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "resource(\"file123.txt\");\n\nallow if true;\n",
           "revocation_ids": [
@@ -1165,10 +1244,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 1
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "check if must_be_present($0) or must_be_present($0);\n\nallow if true;\n",
           "revocation_ids": [
@@ -1224,18 +1305,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 0
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 0,
                         "rule": "check if resource(\"hello\")"
@@ -1333,10 +1420,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 53
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "allow if true;\n",
           "revocation_ids": [
@@ -1372,9 +1461,12 @@
         "": {
           "world": null,
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "InvalidBlockRule": [
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "invalid_block_rule",
+                "value": [
                   0,
                   "operation($unbound, \"read\") <- operation($any1, $any2)"
                 ]
@@ -1450,18 +1542,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 4
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 0,
                         "rule": "check if operation(\"read\")"
@@ -1539,10 +1637,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 3
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "resource(\"file1\");\noperation(\"read\");\n\nallow if true;\n",
           "revocation_ids": [
@@ -1591,10 +1691,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 1
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "check if ns::fact_123(\"hello é\t😁\");\n\nallow if true;\n",
           "revocation_ids": [
@@ -1666,10 +1768,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 28
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "check if read(0), write(1), resource(2), operation(3), right(4), time(5), role(6), owner(7), tenant(8), namespace(9), user(10), team(11), service(12), admin(13), email(14), group(15), member(16), ip_address(17), client(18), client_ip(19), domain(20), path(21), version(22), cluster(23), node(24), hostname(25), nonce(26), query(27);\n\nallow if true;\n",
           "revocation_ids": [
@@ -1743,18 +1847,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 1
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 2,
                         "check_id": 1,
                         "rule": "check if block1_fact($var)"
@@ -1833,10 +1943,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 2
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "allow if true;\n",
           "revocation_ids": [
@@ -1897,10 +2009,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 6
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "operation(\"A\");\noperation(\"B\");\n\nallow if true;\n",
           "revocation_ids": [
@@ -1939,18 +2053,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 6
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 0,
                         "rule": "check all operation($op), allowed_operations($allowed), $allowed.contains($op)"
@@ -1989,18 +2109,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 0
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 0,
                         "rule": "check all operation($op), allowed_operations($allowed), $allowed.contains($op)"
@@ -2181,10 +2307,12 @@
               "deny if query(1, 2)",
               "deny if query(0) trusting ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5152947abc149bc20189",
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 31
           },
           "result": {
-            "Ok": 3
+            "type": "ok",
+            "value": 3
           },
           "authorizer_code": "check if query(1, 2) trusting ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5152947abc149bc20189, ed25519/a060270db7e9c9f06e8f9cc33a64e99f6596af12cb01c4b638df8afc7b642463;\n\ndeny if query(3);\ndeny if query(1, 2);\ndeny if query(0) trusting ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5152947abc149bc20189;\nallow if true;\n",
           "revocation_ids": [
@@ -2226,11 +2354,16 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 1
           },
           "result": {
-            "Err": {
-              "Execution": "Overflow"
+            "type": "err",
+            "value": {
+              "type": "execution",
+              "value": {
+                "type": "overflow"
+              }
             }
           },
           "authorizer_code": "allow if true;\n",
@@ -2276,10 +2409,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 9
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "allow if true;\n",
           "revocation_ids": [
@@ -2326,10 +2461,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 1
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "test(false);\n\nallow if true;\n",
           "revocation_ids": [
@@ -2359,18 +2496,24 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 1
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 0,
                         "rule": "reject if test($test), $test"
@@ -2428,10 +2571,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 4
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "fact(null, null);\n\nallow if true;\n",
           "revocation_ids": [
@@ -2462,25 +2607,32 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 4
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 0,
                         "rule": "check if fact(null, $value), $value == null"
                       }
                     },
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 1,
                         "rule": "reject if fact(null, $value), $value != null"
@@ -2520,25 +2672,32 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 4
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 0,
                         "rule": "check if fact(null, $value), $value == null"
                       }
                     },
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 1,
                         "rule": "reject if fact(null, $value), $value != null"
@@ -2578,25 +2737,32 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 4
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 0,
                         "rule": "check if fact(null, $value), $value == null"
                       }
                     },
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 1,
                         "rule": "reject if fact(null, $value), $value != null"
@@ -2677,10 +2843,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 23
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "fact(1, 1);\nfact2(1, 2);\n\nallow if true;\n",
           "revocation_ids": [
@@ -2737,31 +2905,39 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 24
           },
           "result": {
-            "Err": {
-              "FailedLogic": {
-                "Unauthorized": {
+            "type": "err",
+            "value": {
+              "type": "failed_logic",
+              "value": {
+                "type": "unauthorized",
+                "value": {
                   "policy": {
-                    "Allow": 0
+                    "type": "allow",
+                    "value": 0
                   },
                   "checks": [
                     {
-                      "Authorizer": {
+                      "type": "authorizer",
+                      "value": {
                         "check_id": 0,
                         "rule": "check if false != false"
                       }
                     },
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 19,
                         "rule": "check if fact(1, $value), 1 == $value"
                       }
                     },
                     {
-                      "Block": {
+                      "type": "block",
+                      "value": {
                         "block_id": 0,
                         "check_id": 20,
                         "rule": "check if fact2(1, $value), 1 != $value"
@@ -2819,10 +2995,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 61
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "allow if true;\n",
           "revocation_ids": [
@@ -2852,11 +3030,16 @@
             ],
             "policies": [
               "allow if {\"true\"}.any($p -> {\"true\"}.all($p -> $p))"
-            ]
+            ],
+            "elapsed_steps": 64
           },
           "result": {
-            "Err": {
-              "Execution": "ShadowedVariable"
+            "type": "err",
+            "value": {
+              "type": "execution",
+              "value": {
+                "type": "shadowed_variable"
+              }
             }
           },
           "authorizer_code": "allow if {\"true\"}.any($p -> {\"true\"}.all($p -> $p));\n",
@@ -2938,10 +3121,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 42
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "allow if true;\n",
           "revocation_ids": [
@@ -2968,7 +3153,7 @@
           ],
           "public_keys": [],
           "external_key": null,
-          "code": "check if [1, 2, 1].length() == 3;\ncheck if [\"a\", \"b\"] != true;\ncheck if [\"a\", \"b\"] != [1, 2, 3];\ncheck if [\"a\", \"b\"] == [\"a\", \"b\"];\ncheck if [\"a\", \"b\"] === [\"a\", \"b\"];\ncheck if [\"a\", \"b\"] !== [\"a\", \"c\"];\ncheck if [\"a\", \"b\", \"c\"].contains(\"c\");\ncheck if [1, 2, 3].starts_with([1, 2]);\ncheck if [4, 5, 6].ends_with([6]);\ncheck if [1, 2, \"a\"].get(2) == \"a\";\ncheck if [1, 2].get(3) == null;\ncheck if [1, 2, 3].all($p -> $p > 0);\ncheck if [1, 2, 3].any($p -> $p > 2);\ncheck if {\"a\": 1, \"b\": 2, \"c\": 3, \"d\": 4}.length() == 4;\ncheck if {1: \"a\", 2: \"b\"} != true;\ncheck if {1: \"a\", 2: \"b\"} != {\"a\": 1, \"b\": 2};\ncheck if {1: \"a\", 2: \"b\"} == {1: \"a\", 2: \"b\"};\ncheck if {1: \"a\", 2: \"b\"} !== {\"a\": 1, \"b\": 2};\ncheck if {1: \"a\", 2: \"b\"} === {1: \"a\", 2: \"b\"};\ncheck if {\"a\": 1, \"b\": 2, \"c\": 3, \"d\": 4}.contains(\"d\");\ncheck if {1: \"A\", \"a\": 1, \"b\": 2}.get(\"a\") == 1;\ncheck if {1: \"A\", \"a\": 1, \"b\": 2}.get(1) == \"A\";\ncheck if {1: \"A\", \"a\": 1, \"b\": 2}.get(\"c\") == null;\ncheck if {1: \"A\", \"a\": 1, \"b\": 2}.get(2) == null;\ncheck if {\"a\": 1, \"b\": 2}.all($kv -> $kv.get(0) != \"c\" && $kv.get(1) < 3);\ncheck if {1: \"A\", \"a\": 1, \"b\": 2}.any($kv -> $kv.get(0) == 1 && $kv.get(1) == \"A\");\ncheck if {\"user\": {\"id\": 1, \"roles\": [\"admin\"]}}.get(\"user\").get(\"roles\").contains(\"admin\");\n",
+          "code": "check if [1, 2, 1].length() == 3;\ncheck if [\"a\", \"b\"] != true;\ncheck if [\"a\", \"b\"] != [1, 2, 3];\ncheck if [\"a\", \"b\"] == [\"a\", \"b\"];\ncheck if [\"a\", \"b\"] === [\"a\", \"b\"];\ncheck if [\"a\", \"b\"] !== [\"a\", \"c\"];\ncheck if [\"a\", \"b\", \"c\"].contains(\"c\");\ncheck if [1, 2, 3].starts_with([1, 2]);\ncheck if [4, 5, 6].ends_with([6]);\ncheck if [1, 2, \"a\"].get(2) == \"a\";\ncheck if [1, 2].get(3) == null;\ncheck if [1, 2].get(-1) == null;\ncheck if [1, 2, 3].all($p -> $p > 0);\ncheck if [1, 2, 3].any($p -> $p > 2);\ncheck if {\"a\": 1, \"b\": 2, \"c\": 3, \"d\": 4}.length() == 4;\ncheck if {1: \"a\", 2: \"b\"} != true;\ncheck if {1: \"a\", 2: \"b\"} != {\"a\": 1, \"b\": 2};\ncheck if {1: \"a\", 2: \"b\"} == {1: \"a\", 2: \"b\"};\ncheck if {1: \"a\", 2: \"b\"} !== {\"a\": 1, \"b\": 2};\ncheck if {1: \"a\", 2: \"b\"} === {1: \"a\", 2: \"b\"};\ncheck if {\"a\": 1, \"b\": 2, \"c\": 3, \"d\": 4}.contains(\"d\");\ncheck if {1: \"A\", \"a\": 1, \"b\": 2}.get(\"a\") == 1;\ncheck if {1: \"A\", \"a\": 1, \"b\": 2}.get(1) == \"A\";\ncheck if {1: \"A\", \"a\": 1, \"b\": 2}.get(\"c\") == null;\ncheck if {1: \"A\", \"a\": 1, \"b\": 2}.get(2) == null;\ncheck if {\"a\": 1, \"b\": 2}.all($kv -> $kv.get(0) != \"c\" && $kv.get(1) < 3);\ncheck if {1: \"A\", \"a\": 1, \"b\": 2}.any($kv -> $kv.get(0) == 1 && $kv.get(1) == \"A\");\ncheck if {\"user\": {\"id\": 1, \"roles\": [\"admin\"]}}.get(\"user\").get(\"roles\").contains(\"admin\");\n",
           "version": 6
         }
       ],
@@ -2992,6 +3177,7 @@
                   "check if [1, 2, 3].all($p -> $p > 0)",
                   "check if [1, 2, 3].any($p -> $p > 2)",
                   "check if [1, 2, 3].starts_with([1, 2])",
+                  "check if [1, 2].get(-1) == null",
                   "check if [1, 2].get(3) == null",
                   "check if [4, 5, 6].ends_with([6])",
                   "check if {\"a\": 1, \"b\": 2, \"c\": 3, \"d\": 4}.contains(\"d\")",
@@ -3013,14 +3199,16 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 72
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "allow if true;\n",
           "revocation_ids": [
-            "b22238a06ca9c015d3c49d4ebaa7e8ab6e0d69119b3264033618e726d62fc6f4757a7bebc25f255444aba39994554a62a53ecc13b68802efab8da85ace62390d"
+            "0227fc29d6bf85cc52503f497b0b232235ffe5192c68933388136eae3fc3419229e9489b85d1bb57525554edac7cda87c984c96639bfb4171acc499312ffe30e"
           ]
         }
       }
@@ -3056,10 +3244,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 3
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "allow if true;\n",
           "revocation_ids": [
@@ -3127,10 +3317,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 3
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "resource(\"file1\");\noperation(\"read\");\n\nallow if true;\n",
           "revocation_ids": [
@@ -3217,10 +3409,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 4
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "resource(\"file1\");\noperation(\"read\");\n\nallow if true;\n",
           "revocation_ids": [
@@ -3259,10 +3453,12 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 10
           },
           "result": {
-            "Ok": 0
+            "type": "ok",
+            "value": 0
           },
           "authorizer_code": "allow if true;\n",
           "revocation_ids": [
@@ -3291,17 +3487,70 @@
             ],
             "policies": [
               "allow if true"
-            ]
+            ],
+            "elapsed_steps": 1
           },
           "result": {
-            "Err": {
-              "Execution": "InvalidType"
+            "type": "err",
+            "value": {
+              "type": "execution",
+              "value": {
+                "type": "invalid_type"
+              }
             }
           },
           "authorizer_code": "check if true.try_or(true === 12);\n\nallow if true;\n",
           "revocation_ids": [
             "79674155cd5349604e89b00792aeaebfa0a512bd45edc289305ebec107f627d3d8c09847646a0d06c2390a4354771b2ebdc2cc66971f2d74ef744e4e81197600"
           ]
+        }
+      }
+    },
+    {
+      "title": "block referencing a symbol defined in a later block",
+      "filename": "test039_forward_symbol_reference.bc",
+      "token": [
+        {
+          "symbols": [
+            "file1"
+          ],
+          "public_keys": [],
+          "external_key": null,
+          "code": "right(\"file1\", \"read\");\n",
+          "version": 3
+        },
+        {
+          "symbols": [],
+          "public_keys": [],
+          "external_key": null,
+          "code": "check if resource(\"file2\");\n",
+          "version": 3
+        },
+        {
+          "symbols": [
+            "file2"
+          ],
+          "public_keys": [],
+          "external_key": null,
+          "code": "check if resource(\"file2\");\n",
+          "version": 3
+        }
+      ],
+      "validations": {
+        "": {
+          "world": null,
+          "result": {
+            "type": "err",
+            "value": {
+              "type": "format",
+              "value": {
+                "type": "unknown_symbol",
+                "value": 1025
+              }
+            }
+          },
+          "authorizer_code": "",
+          "revocation_ids": []
         }
       }
     }
