@@ -84,6 +84,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 1
 }
 ```
 
@@ -119,7 +120,7 @@ check if resource($0), operation("read"), right($0, "read");
 
 ### validation
 
-result: `Err(Format(Signature(InvalidSignature("signature error: Verification equation was not satisfied"))))`
+result: `Err(Format(Signature(InvalidSignature("signature error"))))`
 
 
 ------------------------------
@@ -187,7 +188,7 @@ check if resource($0), operation("read"), right($0, "read");
 
 ### validation
 
-result: `Err(Format(Signature(InvalidSignature("signature error: Verification equation was not satisfied"))))`
+result: `Err(Format(Signature(InvalidSignature("signature error"))))`
 
 
 ------------------------------
@@ -221,7 +222,7 @@ check if resource($0), operation("read"), right($0, "read");
 
 ### validation
 
-result: `Err(Format(Signature(InvalidSignature("signature error: Verification equation was not satisfied"))))`
+result: `Err(Format(Signature(InvalidSignature("signature error"))))`
 
 
 ------------------------------
@@ -266,7 +267,7 @@ check if resource("file1");
 
 ### validation
 
-result: `Err(Format(Signature(InvalidSignature("signature error: Verification equation was not satisfied"))))`
+result: `Err(Format(Signature(InvalidSignature("signature error"))))`
 
 
 ------------------------------
@@ -382,6 +383,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 5
 }
 ```
 
@@ -489,6 +491,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 3
 }
 ```
 
@@ -567,6 +570,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 3
 }
 ```
 
@@ -664,6 +668,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 2
 }
 ```
 
@@ -739,6 +744,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 2
 }
 ```
 
@@ -802,6 +808,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 1
 }
 ```
 
@@ -847,6 +854,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 1
 }
 ```
 
@@ -957,6 +965,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 14
 }
 ```
 
@@ -1024,6 +1033,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 5
 }
 ```
 
@@ -1085,6 +1095,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 2
 }
 ```
 
@@ -1128,6 +1139,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 2
 }
 ```
 
@@ -1191,6 +1203,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 1
 }
 ```
 
@@ -1264,6 +1277,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 0
 }
 ```
 
@@ -1390,6 +1404,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 53
 }
 ```
 
@@ -1515,6 +1530,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 4
 }
 ```
 
@@ -1604,6 +1620,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 3
 }
 ```
 
@@ -1667,6 +1684,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 1
 }
 ```
 
@@ -1784,6 +1802,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 28
 }
 ```
 
@@ -1881,6 +1900,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 1
 }
 ```
 
@@ -1976,6 +1996,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 2
 }
 ```
 
@@ -2050,6 +2071,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 6
 }
 ```
 
@@ -2105,6 +2127,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 6
 }
 ```
 
@@ -2148,6 +2171,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 0
 }
 ```
 
@@ -2387,6 +2411,7 @@ World {
     "deny if query(0) trusting ed25519/acdd6d5b53bfee478bf689f8e012fe7988bf755e3d7c5152947abc149bc20189",
     "allow if true",
 ]
+  elapsed steps: 31
 }
 ```
 
@@ -2441,6 +2466,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 1
 }
 ```
 
@@ -2503,6 +2529,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 9
 }
 ```
 
@@ -2564,6 +2591,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 1
 }
 ```
 
@@ -2607,6 +2635,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 1
 }
 ```
 
@@ -2670,6 +2699,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 4
 }
 ```
 
@@ -2714,6 +2744,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 4
 }
 ```
 
@@ -2758,6 +2789,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 4
 }
 ```
 
@@ -2802,6 +2834,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 4
 }
 ```
 
@@ -2905,6 +2938,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 23
 }
 ```
 
@@ -2980,6 +3014,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 24
 }
 ```
 
@@ -3048,6 +3083,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 61
 }
 ```
 
@@ -3089,6 +3125,7 @@ World {
   policies: [
     "allow if {\"true\"}.any($p -> {\"true\"}.all($p -> $p))",
 ]
+  elapsed steps: 64
 }
 ```
 
@@ -3197,6 +3234,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 42
 }
 ```
 
@@ -3227,6 +3265,7 @@ check if [1, 2, 3].starts_with([1, 2]);
 check if [4, 5, 6].ends_with([6]);
 check if [1, 2, "a"].get(2) == "a";
 check if [1, 2].get(3) == null;
+check if [1, 2].get(-1) == null;
 check if [1, 2, 3].all($p -> $p > 0);
 check if [1, 2, 3].any($p -> $p > 2);
 check if {"a": 1, "b": 2, "c": 3, "d": 4}.length() == 4;
@@ -3253,7 +3292,7 @@ allow if true;
 ```
 
 revocation ids:
-- `b22238a06ca9c015d3c49d4ebaa7e8ab6e0d69119b3264033618e726d62fc6f4757a7bebc25f255444aba39994554a62a53ecc13b68802efab8da85ace62390d`
+- `0227fc29d6bf85cc52503f497b0b232235ffe5192c68933388136eae3fc3419229e9489b85d1bb57525554edac7cda87c984c96639bfb4171acc499312ffe30e`
 
 authorizer world:
 ```
@@ -3277,6 +3316,7 @@ World {
             "check if [1, 2, 3].all($p -> $p > 0)",
             "check if [1, 2, 3].any($p -> $p > 2)",
             "check if [1, 2, 3].starts_with([1, 2])",
+            "check if [1, 2].get(-1) == null",
             "check if [1, 2].get(3) == null",
             "check if [4, 5, 6].ends_with([6])",
             "check if {\"a\": 1, \"b\": 2, \"c\": 3, \"d\": 4}.contains(\"d\")",
@@ -3299,6 +3339,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 72
 }
 ```
 
@@ -3349,6 +3390,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 3
 }
 ```
 
@@ -3438,6 +3480,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 3
 }
 ```
 
@@ -3549,6 +3592,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 4
 }
 ```
 
@@ -3603,6 +3647,7 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 10
 }
 ```
 
@@ -3647,8 +3692,52 @@ World {
   policies: [
     "allow if true",
 ]
+  elapsed steps: 1
 }
 ```
 
 result: `Err(Execution(InvalidType))`
+
+
+------------------------------
+
+## block referencing a symbol defined in a later block: test039_forward_symbol_reference.bc
+### token
+
+authority:
+symbols: ["file1"]
+
+public keys: []
+
+block version: 3
+
+```
+right("file1", "read");
+```
+
+1:
+symbols: []
+
+public keys: []
+
+block version: 3
+
+```
+check if resource("file2");
+```
+
+2:
+symbols: ["file2"]
+
+public keys: []
+
+block version: 3
+
+```
+check if resource("file2");
+```
+
+### validation
+
+result: `Err(Format(UnknownSymbol(1025)))`
 
